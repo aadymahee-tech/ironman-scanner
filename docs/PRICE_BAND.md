@@ -81,7 +81,10 @@ python3 tools/build_indicator.py
 ## Known limitations
 
 - **40-symbol ceiling.** Pine allows 40 `request.security()` calls. The watchlist uses
-  all 40. You cannot add a 41st without removing one.
+  39 of them (one slot is open — `NSE:LTTS` left the F&O segment in March 2025).
+  You cannot add a 41st without removing one.
+  The ceiling is a **Pine** limit: the headless scanner and dashboard run the full
+  210-name universe from `data/fno_universe.csv`. See [`SCANNER.md`](SCANNER.md).
 - **The band is checked on `close`, not on intrabar extremes.** A stock that spends
   the day at ₹1,050 and closes at ₹995 is out of band on that bar. This is deliberate —
   it avoids flip-flopping — but if you want intrabar behaviour, swap `close` for

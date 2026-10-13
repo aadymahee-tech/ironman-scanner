@@ -15,7 +15,7 @@ from __future__ import annotations
 import html
 import json
 from datetime import datetime, timezone
-from typing import List, Optional, Sequence
+from typing import List, Optional
 
 from .datafeed import IST
 from .engine import ACTIONABLE_THRESHOLD, SymbolScan
@@ -404,7 +404,7 @@ def render_dashboard(report: ScanReport, *, title: str = "IronMan F&O scan") -> 
     sig_chip = (
         f'<span class="chip sig">SIG {counts["signals"]}</span>'
         if counts["signals"]
-        else f'<span class="chip sig zero">SIG 0</span>'
+        else '<span class="chip sig zero">SIG 0</span>'
     )
 
     return f"""<!doctype html>

@@ -40,7 +40,6 @@ import argparse
 import csv
 import io
 import re
-import sys
 import urllib.error
 import urllib.request
 from pathlib import Path

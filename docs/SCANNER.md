@@ -104,6 +104,93 @@ conventions (`ta.ema` seeding, `ta.stdev` population bias, `na` semantics), the
 provider parsers against canned payloads, the report renderers, the watchlist
 guards, and an end-to-end CLI run using the same flags the workflow passes.
 
+## The full F&O universe
+
+The Pine indicator carries 40 symbols because **Pine Script v5 caps a script at
+40 `request.security()` calls**. That is a platform limit — no amount of
+generator work gets around it, and a "full F&O list" indicator is therefore
+impossible on TradingView.
+
+The scanner is a Python program, so it has no such ceiling. It runs over the
+whole single-stock F&O segment:
+
+```bash
+python3 ironman_scanner.py --universe --interval 15m --lookback 2 \
+  --low 1000 --high 10000 --workers 8 \
+  --csv results/history/$(date -u +%F).csv \
+  --md results/latest.md \
+  --html results/dashboard.html
+```
+
+| Flag | Effect |
+| --- | --- |
+| *(none)* / `--watchlist FILE` | The 40-name price-band list in `data/fno_watchlist_price_band.csv`. |
+| `--universe` | Every symbol in `data/fno_universe.csv` — the full segment. |
+
+`data/fno_universe.csv` holds `symbol,name,sector,enabled` for each underlying.
+It is seeded from NSE's own `fo_mktlots.csv` and kept current by
+`tools/sync_universe.py`:
+
+```bash
+python3 tools/sync_universe.py                 # diff against live NSE, report only
+python3 tools/sync_universe.py --write         # apply additions and removals
+python3 tools/sync_universe.py --audit         # also check the 40-name watchlist
+python3 tools/sync_universe.py --from FILE     # use a local copy of the NSE file
+python3 tools/sync_universe.py --check         # exit 1 if out of date (for CI)
+```
+
+Sync rules, so re-running it is never destructive:
+
+- **Adds** symbols NSE has added. Name comes from the curated metadata in the
+  tool when there is one, otherwise from NSE's own underlying text; sector
+  defaults to `Unknown`.
+- **Removes** symbols NSE has dropped.
+- **Never rewrites** the name, sector or `enabled` flag of a symbol already in
+  the file, so hand-curated values survive every re-sync.
+
+NSE blocks some datacentre ranges, which is what `--from` is for. The scheduled
+workflow treats a refresh as best effort: the scan runs with the committed
+universe whether or not NSE answered.
+
+### Keeping the hand-curated 40 in step
+
+`--audit` cross-checks the enabled names in the 40-name price-band watchlist
+against the current F&O segment and reports any that are no longer tradeable:
+
+```
+watchlist audit : 1 enabled name(s) NOT in the F&O segment: LTTS
+```
+
+That check is what caught two dead rows in this repo — see the CHANGELOG:
+`NSE:LTTS` (out of F&O since 2025-03-28) and `NSE:LTIM` (renamed to `LTM`).
+
+## The dashboard
+
+`--html PATH` writes a single self-contained page: inline CSS and a little
+vanilla JS, no CDN, no fonts, no frameworks. It works from a `file://` path, as
+a workflow artifact, or committed to `results/`.
+
+It contains the scan header (interval, lookback, band, signal count, coverage),
+stat cards, a signals table sorted by score and freshness, and the full universe
+as a sortable/filterable table — filter by text, signals only, in-band only, or
+sector, and click any header to sort. Rows are coloured like the indicator's
+table: green for long setups, red for short, amber for out-of-range names.
+
+The scan payload is also embedded as JSON in a `<script type="application/json">`
+tag, so the page can be re-rendered or audited without re-running a scan:
+
+```bash
+python3 - <<'PY'
+import json, re, html
+page = open("results/dashboard.html", encoding="utf-8").read()
+data = json.loads(html.unescape(re.search(r'id="scan-data">(.*?)</script>', page, re.S).group(1)))
+print(data["counts"], data["symbols"][0])
+PY
+```
+
+Sector labels are a convenience grouping for the interface, not an official NSE
+classification. Prices in the page come from whatever feed the scan used.
+
 ## The data source
 
 Live bars come from the public Yahoo Finance chart endpoint
