@@ -1,13 +1,23 @@
 name: IronMan F&O Scan
 
-# ---------------------------------------------------------------------------
+# --------------------------------------------------------------------------- #
 #  Scheduled intraday + closing scans of the full NSE F&O universe
 #  (price band 1,000-10,000 by default). Results are committed back to
 #  results/ and printed to the Actions step summary.
 #
+#  The universe comes from data/fno_universe.csv (210+ single-stock F&O
+#  underlyings). The Pine indicator can only carry 40 of them, because Pine
+#  Script v5 limits a script to 40 request.security() calls - a platform limit.
+#  This job is a Python program, so it has no such ceiling.
+#
 #  Crontab is UTC. IST = UTC + 5:30, so:
-#    */15 3-9 * * 1-5  ->  every 15 min from 08:45 to 15:45 IST (Mon-Fri)
+#    */15 3-9 * * 1-5  ->  every 15 min from 08:30 to 15:15 IST (Mon-Fri)
 #    5 10 * * 1-5      ->  15:35 IST closing scan (Mon-Fri)
+#
+#  The intraday grid stops at 15:15 IST, so the last 15-minute candle
+#  (15:15-15:30) is picked up by the 15:35 closing scan. The 08:30 run lands
+#  before the open and therefore re-states the previous close.
+#
 #  GitHub schedules can drift by a few minutes at peak times; that is normal.
 #
 #  Customise without editing this file: create repository variables
@@ -16,7 +26,9 @@ name: IronMan F&O Scan
 #    SCAN_LOOKBACK  (int)                   default 2
 #    SCAN_BAND_LOW  (int)                   default 1000
 #    SCAN_BAND_HIGH (int)                   default 10000
-# ---------------------------------------------------------------------------
+#    SCAN_WORKERS   (int)                   default 8
+#    SCAN_UNIVERSE  (universe|watchlist)    default universe
+# --------------------------------------------------------------------------- #
 
 on:
   schedule:
@@ -33,6 +45,8 @@ on:
 
 permissions:
   contents: write          # needed to commit results/ back to the repo
+  pages: write             # needed to publish the dashboard
+  id-token: write          # needed by deploy-pages
 
 concurrency:
   group: ironman-scan
@@ -41,11 +55,15 @@ concurrency:
 jobs:
   scan:
     runs-on: ubuntu-latest
+    outputs:
+      pages_enabled: ${{ steps.pages.outputs.enabled }}
     env:
       SCAN_INTERVAL:  ${{ github.event.inputs.interval || vars.SCAN_INTERVAL || '15m' }}
       SCAN_LOOKBACK:  ${{ github.event.inputs.lookback || vars.SCAN_LOOKBACK || '2' }}
       SCAN_BAND_LOW:  ${{ vars.SCAN_BAND_LOW || '1000' }}
       SCAN_BAND_HIGH: ${{ vars.SCAN_BAND_HIGH || '10000' }}
+      SCAN_WORKERS:   ${{ vars.SCAN_WORKERS || '8' }}
+      SCAN_UNIVERSE:  ${{ vars.SCAN_UNIVERSE || 'universe' }}
 
     steps:
       - name: Check out repository
@@ -56,28 +74,97 @@ jobs:
         with:
           python-version: "3.12"
 
+      # NSE publishes the F&O list as fo_mktlots.csv. A refresh is best-effort:
+      # NSE blocks some datacentre ranges, and a scan must not fail because the
+      # universe file could not be re-checked.
+      - name: Refresh the F&O universe (best effort)
+        continue-on-error: true
+        run: python tools/sync_universe.py --audit --write
+
       - name: Run scanner
         run: |
           DAY=$(date -u +%F)
           mkdir -p results/history
+          if [ "$SCAN_UNIVERSE" = "watchlist" ]; then
+            LIST_FLAG=""
+          else
+            LIST_FLAG="--universe"
+          fi
           python ironman_scanner.py \
             --interval "$SCAN_INTERVAL" \
             --lookback "$SCAN_LOOKBACK" \
             --low  "$SCAN_BAND_LOW" \
             --high "$SCAN_BAND_HIGH" \
-            --workers 6 \
+            --workers "$SCAN_WORKERS" \
+            $LIST_FLAG \
             --csv "results/history/${DAY}.csv" \
-            --md  results/latest.md
+            --md  results/latest.md \
+            --html results/dashboard.html
           cat results/latest.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload dashboard
+        uses: actions/upload-artifact@v4
+        with:
+          name: ironman-dashboard
+          path: results/dashboard.html
+          if-no-files-found: warn
+          retention-days: 14
 
       - name: Commit results
         run: |
           git config user.name  "ironman-bot"
           git config user.email "ironman-bot@users.noreply.github.com"
-          git add results
+          git add results data/fno_universe.csv
           if git diff --cached --quiet; then
             echo "No result changes to commit."
           else
             git commit -m "scan $(date -u '+%Y-%m-%d %H:%M UTC') [$SCAN_INTERVAL / lb$SCAN_LOOKBACK]"
             git push
           fi
+
+      # ---- publish the dashboard to GitHub Pages ---------------------------- #
+      # A committed .html file shows up as source text on GitHub, so the
+      # dashboard is also published as a page. Pages has to be switched on once
+      # (Settings -> Pages -> Source: GitHub Actions); until then this step only
+      # warns, so the scan itself never goes red because of a missing setting.
+      - name: Assemble the Pages site
+        run: |
+          mkdir -p _site
+          cp results/dashboard.html _site/index.html
+          cp results/latest.md _site/latest.md 2>/dev/null || true
+
+      - name: Is GitHub Pages enabled?
+        id: pages
+        run: |
+          status=$(curl -s -o /dev/null -w '%{http_code}' \
+            -H "Authorization: Bearer ${{ github.token }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pages")
+          if [ "$status" = "404" ]; then
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::warning title=Dashboard is not published::GitHub Pages is not enabled. Turn it on under Settings -> Pages -> Source: GitHub Actions and every scan will publish results/dashboard.html to a live URL."
+          else
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload the site
+        if: steps.pages.outputs.enabled == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  # Only runs once Pages is switched on, so a missing setting cannot fail a scan.
+  publish-dashboard:
+    needs: scan
+    if: needs.scan.outputs.pages_enabled == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Deploy the dashboard
+        id: deploy
+        uses: actions/deploy-pages@v4

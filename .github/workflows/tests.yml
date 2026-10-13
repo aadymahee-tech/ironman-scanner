@@ -1,0 +1,74 @@
+name: Tests
+
+# The scheduled scan (main.yml) invokes ironman_scanner.py. Until this workflow
+# existed nothing checked that the scanner, the generator and the watchlist were
+# even importable — a missing scanner file could sit in main undetected because
+# the only thing that would have failed was a scheduled job whose job is to
+# produce a report nobody had seen yet.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run the test suite
+        run: python -m unittest discover -s tests -t . -v
+
+      - name: Validate the watchlist and the generated Pine file
+        run: |
+          python tools/build_indicator.py --check
+          python tools/build_indicator.py
+          if ! git diff --quiet -- indicators/; then
+            echo "::error::indicators/ is stale - run 'python3 tools/build_indicator.py' and commit the result"
+            git --no-pager diff --stat -- indicators/
+            exit 1
+          fi
+
+      # Best effort: NSE blocks some datacentre ranges, and a third-party host
+      # must not fail a build. If this reports drift, re-run the sync and commit.
+      - name: Check the F&O universe against NSE
+        continue-on-error: true
+        run: python tools/sync_universe.py --audit --check
+
+      - name: Offline scanner smoke test
+        run: |
+          python ironman_scanner.py \
+            --source fixture \
+            --fixture tests/fixtures/engine.json \
+            --watchlist tests/fixtures/watchlist.csv \
+            --interval 15m --lookback 2 --low 1000 --high 10000 \
+            --md /tmp/latest.md --quiet
+          grep -q "BOX BREAKOUT" /tmp/latest.md
+
+      - name: Offline dashboard smoke test
+        run: |
+          python ironman_scanner.py \
+            --universe --source fixture \
+            --fixture tests/fixtures/engine.json \
+            --interval 15m --lookback 2 --low 1000 --high 10000 \
+            --html /tmp/dashboard.html --quiet
+          # the full universe is scanned even though the fixture only covers 4 names
+          grep -q "IRONMAN" /tmp/dashboard.html
+          grep -q "/210 scanned" /tmp/dashboard.html
+          test "$(grep -c 'data-symbol=' /tmp/dashboard.html)" -eq 210
+          if grep -qE '(src|href)="https?://' /tmp/dashboard.html; then
+            echo "::error::dashboard must be self-contained (no external references)"
+            exit 1
+          fi
+          echo "dashboard: $(wc -c < /tmp/dashboard.html) bytes, all 210 rows present"

@@ -1,0 +1,90 @@
+name: Live feed check
+
+# The scan itself (main.yml) is scheduled, so a broken live feed would only be
+# noticed on the next tick — and if the feed breaks, nothing gets committed and
+# the failure mode is a silent gap in results/. This checks the live provider on
+# every PR and on demand.
+#
+# It is deliberately REPORT-ONLY: the provider is an unofficial, rate-limited
+# endpoint, and a flaky third-party host must never block a merge. Treat the
+# output as a signal, not a gate. The hard guard lives in main.yml, which exits
+# non-zero when every fetch fails.
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  feed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Probe the full F&O universe (informational)
+        run: |
+          {
+            echo "### Live feed check — full F&O universe"
+            echo
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          set +e
+          python ironman_scanner.py \
+            --universe --source yahoo \
+            --interval 15m --lookback 1 \
+            --low 1000 --high 10000 \
+            --workers 8 \
+            --md - --verbose \
+            --csv /tmp/probe.csv \
+            --html /tmp/probe-dashboard.html 2>&1 | tee /tmp/probe.log
+          code=${PIPESTATUS[0]}
+          set -e
+
+          scanned=$(grep -oE 'scanned +: [0-9]+/[0-9]+ symbols' /tmp/probe.log | tail -1 || true)
+          ok=$(grep -cE '· NSE:' /tmp/probe.log || true)
+          bad=$(grep -cE '! NSE:' /tmp/probe.log || true)
+
+          # Which names failed, so a provider or ticker problem is actionable.
+          failures=$(grep -oE '! NSE:[A-Z0-9_.&-]+' /tmp/probe.log | sed 's/! //' | sort -u | head -25 || true)
+
+          {
+            echo '```'
+            echo
+            echo "${scanned:-scanner produced no summary}"
+            echo "resolved: ${ok}   failed: ${bad}"
+            if [ -n "$failures" ]; then
+              echo
+              echo "Failed symbols:"
+              echo "$failures"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$code" -eq 0 ] && [ "${ok:-0}" -gt 0 ]; then
+            echo "::notice title=Live feed check::${scanned}; ${ok} symbol(s) resolved from the live provider, ${bad} failed."
+          else
+            echo "::warning title=Live feed check::exit ${code}, ${ok} resolved, ${bad} failed. Not blocking: the endpoint is unofficial and rate-limited. If this persists, its response shape or the symbol mapping may have changed."
+          fi
+
+          # Report-only by design: never fail the build from a third-party host.
+          exit 0
+
+      # A dashboard built from live data, so a pull request can be reviewed
+      # against the real universe without anyone running it locally.
+      - name: Upload live dashboard
+        uses: actions/upload-artifact@v4
+        with:
+          name: ironman-live-dashboard
+          path: |
+            /tmp/probe-dashboard.html
+            /tmp/probe.csv
+          if-no-files-found: warn
+          retention-days: 14

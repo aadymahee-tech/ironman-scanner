@@ -1,0 +1,211 @@
+symbol,name,sector,enabled
+NSE:360ONE,360 One WAM,Financial Services,1
+NSE:ABCAPITAL,Aditya Birla Capital,Financial Services,1
+NSE:ADANIENSOL,Adani Energy Solutions,Energy & Power,1
+NSE:ABB,ABB India,Capital Goods & Defence,1
+NSE:ADANIPORTS,Adani Ports & Special Economic Zone,Infrastructure & Logistics,1
+NSE:AMBER,Amber Enterprises India,Consumer Durables & Retail,1
+NSE:ASIANPAINT,Asian Paints,Consumer Durables & Retail,1
+NSE:AMBUJACEM,Ambuja Cements,Cement & Building Materials,1
+NSE:ADANIENT,Adani Enterprises,Diversified,1
+NSE:BAJAJ-AUTO,Bajaj Auto,Auto & Ancillaries,1
+NSE:BAJAJHLDNG,Bajaj Holdings & Investment,Financial Services,1
+NSE:APLAPOLLO,APL Apollo Tubes,Metals & Mining,1
+NSE:ADANIGREEN,Adani Green Energy,Energy & Power,1
+NSE:AUROPHARMA,Aurobindo Pharma,Pharma & Healthcare,1
+NSE:AXISBANK,Axis Bank,Banks,1
+NSE:BOSCHLTD,Bosch,Auto & Ancillaries,1
+NSE:BRITANNIA,Britannia Industries,FMCG & Consumer,1
+NSE:CDSL,Central Depository Services,Financial Services,1
+NSE:BANDHANBNK,Bandhan Bank,Banks,1
+NSE:BANKBARODA,Bank of Baroda,Banks,1
+NSE:BDL,Bharat Dynamics,Capital Goods & Defence,1
+NSE:BHARATFORG,Bharat Forge,Auto & Ancillaries,1
+NSE:COALINDIA,Coal India,Energy & Power,1
+NSE:BHARTIARTL,Bharti Airtel,Telecom & Media,1
+NSE:BLUESTARCO,Blue Star,Consumer Durables & Retail,1
+NSE:BPCL,Bharat Petroleum Corporation,Energy & Power,1
+NSE:ALKEM,Alkem Laboratories,Pharma & Healthcare,1
+NSE:CAMS,Computer Age Management Services,Financial Services,1
+NSE:CHOLAFIN,Cholamandalam Investment & Finance,Financial Services,1
+NSE:CIPLA,Cipla,Pharma & Healthcare,1
+NSE:COCHINSHIP,Cochin Shipyard,Capital Goods & Defence,1
+NSE:COLPAL,Colgate-Palmolive India,FMCG & Consumer,1
+NSE:COFORGE,Coforge,IT,1
+NSE:CROMPTON,Crompton Greaves Consumer Electricals,Consumer Durables & Retail,1
+NSE:CONCOR,Container Corporation of India,Infrastructure & Logistics,1
+NSE:DABUR,Dabur India,FMCG & Consumer,1
+NSE:ANGELONE,Angel One,Financial Services,1
+NSE:APOLLOHOSP,Apollo Hospitals Enterprise,Pharma & Healthcare,1
+NSE:DELHIVERY,Delhivery,Infrastructure & Logistics,1
+NSE:DIVISLAB,Divi's Laboratories,Pharma & Healthcare,1
+NSE:DLF,DLF,Realty,1
+NSE:DMART,Avenue Supermarts (DMart),Consumer Durables & Retail,1
+NSE:DRREDDY,Dr. Reddy's Laboratories,Pharma & Healthcare,1
+NSE:DIXON,Dixon Technologies India,Consumer Durables & Retail,1
+NSE:ETERNAL,Eternal (Zomato),Consumer Durables & Retail,1
+NSE:FORCEMOT,Force Motors,Auto & Ancillaries,1
+NSE:FORTIS,Fortis Healthcare,Pharma & Healthcare,1
+NSE:GLENMARK,Glenmark Pharmaceuticals,Pharma & Healthcare,1
+NSE:GODFRYPHLP,Godfrey Phillips India,FMCG & Consumer,1
+NSE:BANKINDIA,Bank of India,Banks,1
+NSE:GODREJPROP,Godrej Properties,Realty,1
+NSE:GODREJCP,Godrej Consumer Products,FMCG & Consumer,1
+NSE:HCLTECH,HCL Technologies,IT,1
+NSE:HDFCBANK,HDFC Bank,Banks,1
+NSE:GRASIM,Grasim Industries,Cement & Building Materials,1
+NSE:GVT&D,GE Vernova T&D India,Capital Goods & Defence,1
+NSE:HAVELLS,Havells India,Consumer Durables & Retail,1
+NSE:HDFCLIFE,HDFC Life Insurance,Financial Services,1
+NSE:BEL,Bharat Electronics,Capital Goods & Defence,1
+NSE:BHEL,Bharat Heavy Electricals,Capital Goods & Defence,1
+NSE:HINDALCO,Hindalco Industries,Metals & Mining,1
+NSE:BIOCON,Biocon,Pharma & Healthcare,1
+NSE:HINDUNILVR,Hindustan Unilever,FMCG & Consumer,1
+NSE:HINDZINC,Hindustan Zinc,Metals & Mining,1
+NSE:IDFCFIRSTB,IDFC First Bank,Banks,1
+NSE:INDUSINDBK,IndusInd Bank,Banks,1
+NSE:ICICIGI,ICICI Lombard General Insurance,Financial Services,1
+NSE:CGPOWER,CG Power and Industrial Solutions,Capital Goods & Defence,1
+NSE:IRFC,Indian Railway Finance Corporation,Infrastructure & Logistics,1
+NSE:JINDALSTEL,Jindal Steel,Metals & Mining,1
+NSE:JIOFIN,Jio Financial Services,Financial Services,1
+NSE:IEX,Indian Energy Exchange,Financial Services,1
+NSE:INDHOTEL,Indian Hotels Company,Consumer Durables & Retail,1
+NSE:INDIANB,Indian Bank,Banks,1
+NSE:JSWENERGY,JSW Energy,Energy & Power,1
+NSE:JSWSTEEL,JSW Steel,Metals & Mining,1
+NSE:KAYNES,Kaynes Technology India,Capital Goods & Defence,1
+NSE:KEI,KEI Industries,Cement & Building Materials,1
+NSE:INFY,Infosys,IT,1
+NSE:INOXWIND,Inox Wind,Energy & Power,1
+NSE:ITC,ITC,FMCG & Consumer,1
+NSE:KPITTECH,KPIT Technologies,IT,1
+NSE:JUBLFOOD,Jubilant FoodWorks,FMCG & Consumer,1
+NSE:LT,Larsen & Toubro,Capital Goods & Defence,1
+NSE:M&M,Mahindra & Mahindra,Auto & Ancillaries,1
+NSE:KALYANKJIL,Kalyan Jewellers India,Consumer Durables & Retail,1
+NSE:MANKIND,Mankind Pharma,Pharma & Healthcare,1
+NSE:MARICO,Marico,FMCG & Consumer,1
+NSE:ADANIPOWER,Adani Power,Energy & Power,1
+NSE:MCX,Multi Commodity Exchange,Financial Services,1
+NSE:NAM-INDIA,Nippon Life India Asset Management,Financial Services,1
+NSE:KFINTECH,KFin Technologies,Financial Services,1
+NSE:NESTLEIND,Nestle India,FMCG & Consumer,1
+NSE:EICHERMOT,Eicher Motors,Auto & Ancillaries,1
+NSE:LODHA,Macrotech Developers (Lodha),Realty,1
+NSE:FEDERALBNK,Federal Bank,Banks,1
+NSE:OBEROIRLTY,Oberoi Realty,Realty,1
+NSE:LTM,LTIMindtree,IT,1
+NSE:LUPIN,Lupin,Pharma & Healthcare,1
+NSE:PAGEIND,Page Industries,Consumer Durables & Retail,1
+NSE:MANAPPURAM,Manappuram Finance,Financial Services,1
+NSE:PAYTM,One 97 Communications (Paytm),Diversified,1
+NSE:PFC,Power Finance Corporation,Financial Services,1
+NSE:PGEL,PG Electroplast,Consumer Durables & Retail,1
+NSE:MARUTI,Maruti Suzuki India,Auto & Ancillaries,1
+NSE:MAXHEALTH,Max Healthcare Institute,Pharma & Healthcare,1
+NSE:PHOENIXLTD,Phoenix Mills,Realty,1
+NSE:PNB,Punjab National Bank,Banks,1
+NSE:MOTHERSON,Samvardhana Motherson International,Auto & Ancillaries,1
+NSE:POLYCAB,Polycab India,Cement & Building Materials,1
+NSE:POWERINDIA,Hitachi Energy India,Capital Goods & Defence,1
+NSE:NMDC,NMDC,Metals & Mining,1
+NSE:OFSS,Oracle Financial Services Software,IT,1
+NSE:PRESTIGE,Prestige Estates Projects,Realty,1
+NSE:OIL,Oil India,Energy & Power,1
+NSE:ONGC,Oil and Natural Gas Corporation,Energy & Power,1
+NSE:PATANJALI,Patanjali Foods,FMCG & Consumer,1
+NSE:RECLTD,REC,Financial Services,1
+NSE:SBILIFE,SBI Life Insurance,Financial Services,1
+NSE:GMRAIRPORT,GMR Airports,Infrastructure & Logistics,1
+NSE:SBIN,State Bank of India,Banks,1
+NSE:SHREECEM,Shree Cement,Cement & Building Materials,1
+NSE:TATACONSUM,Tata Consumer Products,FMCG & Consumer,1
+NSE:PETRONET,Petronet LNG,Energy & Power,1
+NSE:TATAELXSI,Tata Elxsi,IT,1
+NSE:TATASTEEL,Tata Steel,Metals & Mining,1
+NSE:TMPV,Tata Motors Passenger Vehicles,Auto & Ancillaries,1
+NSE:UPL,UPL,Chemicals,1
+NSE:PIDILITIND,Pidilite Industries,Consumer Durables & Retail,1
+NSE:WAAREEENER,Waaree Energies,Energy & Power,1
+NSE:PIIND,PI Industries,Chemicals,1
+NSE:BAJAJFINSV,Bajaj Finserv,Financial Services,1
+NSE:POLICYBZR,PB Fintech,Financial Services,1
+NSE:PREMIERENE,Premier Energies,Energy & Power,1
+NSE:RADICO,Radico Khaitan,FMCG & Consumer,1
+NSE:RBLBANK,RBL Bank,Banks,1
+NSE:SAIL,Steel Authority of India,Metals & Mining,1
+NSE:SOLARINDS,Solar Industries India,Energy & Power,1
+NSE:SUNPHARMA,Sun Pharmaceutical Industries,Pharma & Healthcare,1
+NSE:SUPREMEIND,Supreme Industries,Cement & Building Materials,1
+NSE:SUZLON,Suzlon Energy,Energy & Power,1
+NSE:SWIGGY,Swiggy,Consumer Durables & Retail,1
+NSE:TATAPOWER,Tata Power,Energy & Power,1
+NSE:TCS,Tata Consultancy Services,IT,1
+NSE:TIINDIA,Tube Investments of India,Auto & Ancillaries,1
+NSE:TITAN,Titan Company,Consumer Durables & Retail,1
+NSE:TVSMOTOR,TVS Motor Company,Auto & Ancillaries,1
+NSE:UNIONBANK,Union Bank of India,Banks,1
+NSE:VBL,Varun Beverages,FMCG & Consumer,1
+NSE:VEDL,Vedanta,Metals & Mining,1
+NSE:ZYDUSLIFE,Zydus Lifesciences,Pharma & Healthcare,1
+NSE:HEROMOTOCO,Hero MotoCorp,Auto & Ancillaries,1
+NSE:HYUNDAI,Hyundai Motor India,Auto & Ancillaries,1
+NSE:ICICIBANK,ICICI Bank,Banks,1
+NSE:INDIGO,InterGlobe Aviation (IndiGo),Infrastructure & Logistics,1
+NSE:BSE,BSE,Financial Services,1
+NSE:LICHSGFIN,LIC Housing Finance,Financial Services,1
+NSE:LTF,L&T Finance,Financial Services,1
+NSE:HDFCAMC,HDFC Asset Management,Financial Services,1
+NSE:MOTILALOFS,Motilal Oswal Financial Services,Financial Services,1
+NSE:MPHASIS,Mphasis,IT,1
+NSE:NATIONALUM,National Aluminium Company,Metals & Mining,1
+NSE:NBCC,NBCC (India),Infrastructure & Logistics,1
+NSE:NYKAA,FSN E-Commerce Ventures (Nykaa),Consumer Durables & Retail,1
+NSE:ICICIPRULI,ICICI Prudential Life Insurance,Financial Services,1
+NSE:PERSISTENT,Persistent Systems,IT,1
+NSE:PNBHOUSING,PNB Housing Finance,Financial Services,1
+NSE:POWERGRID,Power Grid Corporation of India,Energy & Power,1
+NSE:LAURUSLABS,Laurus Labs,Pharma & Healthcare,1
+NSE:RELIANCE,Reliance Industries,Diversified,1
+NSE:MAZDOCK,Mazagon Dock Shipbuilders,Capital Goods & Defence,1
+NSE:SONACOMS,Sona BLW Precision Forgings,Auto & Ancillaries,1
+NSE:NAUKRI,Info Edge (Naukri),IT,1
+NSE:SRF,SRF,Chemicals,1
+NSE:TECHM,Tech Mahindra,IT,1
+NSE:ULTRACEMCO,UltraTech Cement,Cement & Building Materials,1
+NSE:UNOMINDA,Uno Minda,Auto & Ancillaries,1
+NSE:VMM,Vishal Mega Mart,Consumer Durables & Retail,1
+NSE:WIPRO,Wipro,IT,1
+NSE:ASTRAL,Astral,Cement & Building Materials,1
+NSE:BAJFINANCE,Bajaj Finance,Financial Services,1
+NSE:UNITDSPR,United Spirits,FMCG & Consumer,1
+NSE:ASHOKLEY,Ashok Leyland,Auto & Ancillaries,1
+NSE:MUTHOOTFIN,Muthoot Finance,Financial Services,1
+NSE:CUMMINSIND,Cummins India,Capital Goods & Defence,1
+NSE:GAIL,GAIL (India),Energy & Power,1
+NSE:SIEMENS,Siemens,Capital Goods & Defence,1
+NSE:MFSL,Max Financial Services,Financial Services,1
+NSE:NHPC,NHPC,Energy & Power,1
+NSE:NTPC,NTPC,Energy & Power,1
+NSE:TORNTPHARM,Torrent Pharmaceuticals,Pharma & Healthcare,1
+NSE:RVNL,Rail Vikas Nigam,Infrastructure & Logistics,1
+NSE:KOTAKBANK,Kotak Mahindra Bank,Banks,1
+NSE:LICI,Life Insurance Corporation of India,Financial Services,1
+NSE:AUBANK,AU Small Finance Bank,Banks,1
+NSE:HAL,Hindustan Aeronautics,Capital Goods & Defence,1
+NSE:IDEA,Vodafone Idea,Telecom & Media,1
+NSE:INDUSTOWER,Indus Towers,Telecom & Media,1
+NSE:IOC,Indian Oil Corporation,Energy & Power,1
+NSE:IREDA,Indian Renewable Energy Development Agency,Energy & Power,1
+NSE:TRENT,Trent,Consumer Durables & Retail,1
+NSE:SBICARD,SBI Cards & Payment Services,Financial Services,1
+NSE:SHRIRAMFIN,Shriram Finance,Financial Services,1
+NSE:CANBK,Canara Bank,Banks,1
+NSE:YESBANK,Yes Bank,Banks,1
+NSE:VOLTAS,Voltas,Consumer Durables & Retail,1
+NSE:HINDPETRO,Hindustan Petroleum Corporation,Energy & Power,1
+NSE:ATHERENERG,Ather Energy,Auto & Ancillaries,1
+NSE:MAHABANK,Bank of Maharashtra,Banks,1
+NSE:SAGILITY,Sagility,IT,1

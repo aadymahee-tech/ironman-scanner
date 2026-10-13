@@ -2,6 +2,99 @@
 
 All notable changes to the IronMan screener.
 
+## Unreleased — full F&O universe, dashboard, and two watchlist fixes
+
+### Added
+- **`data/fno_universe.csv` — the full single-stock F&O universe** (210 names,
+  `symbol,name,sector,enabled`). Pine Script v5 caps a script at 40
+  `request.security()` calls, so a full-universe *indicator* is impossible on
+  TradingView; the scanner is a Python program and has no such ceiling. The
+  40-name watchlist keeps the same 40-slot limit and purpose it always had.
+- **`tools/sync_universe.py`** — keeps the universe in step with NSE's published
+  `fo_mktlots.csv`. Adds and removes symbols, preserves curated name/sector/
+  `enabled` values, and reports the diff. `--check` fails CI when out of date;
+  `--from FILE` works from a local copy because NSE blocks some networks.
+- **`--audit`** cross-checks the enabled names in the 40-name price-band
+  watchlist against the current F&O segment. This is what found the two dead
+  rows below, and a test now asserts the invariant holds.
+- **`ironman/dashboard.py` + `--html`** — a self-contained HTML dashboard (inline
+  CSS and vanilla JS, no CDN or frameworks) with a signals table plus the full
+  universe as a sortable, filterable table: text search, signals-only,
+  in-band-only and sector filters, column sorting, and row colours matching the
+  indicator's table. The scan payload is embedded as JSON.
+- **`--universe`** on the scanner, to scan `data/fno_universe.csv` instead of the
+  40-name list.
+- Scheduled workflow now scans the universe and publishes `results/dashboard.html`
+  (committed and uploaded as an artifact); a best-effort universe refresh runs
+  first and never blocks a scan.
+- `feed-check.yml` now probes all 210 symbols on every PR and uploads a
+  live-data dashboard artifact.
+
+### Fixed
+- **`NSE:LTTS` is not an F&O underlying.** It was removed from the segment on
+  2025-03-28 (closed by circular NSE/FAOP/66251) but was still enabled in the
+  40-name watchlist, so one row could never resolve as F&O. Now `enabled=0`,
+  leaving 39 of 40 Pine slots in use.
+- **`NSE:LTIM` was superseded by `NSE:LTM`.** The watchlist carried the stale
+  ticker; the generated `.pine` now reads `NSE:LTM`.
+- **`NSE:M_M` is not a real ticker.** NSE's own market-lot file lists `M&M`
+  (Mahindra & Mahindra), and `&` is a valid NSE symbol character. The watchlist
+  and the generated `.pine` now use `M&M`; the symbol validator accepts `&` so
+  `M&M` and `GVT&D` pass.
+- Dead Pine variables (`rsi`, `neckline_res`, `neckline_sup`) — unchanged, still
+  not ported to the scanner.
+
+### Verified
+- Live provider probe from GitHub Actions: **210/210 universe symbols resolved**,
+  0 failures.
+
+## Unreleased — headless scanner + CI
+
+### Fixed
+- **`.github/workflows/main.yml` called a program that did not exist.**
+  The scheduled scan ran `python ironman_scanner.py`, but no such file was ever
+  committed — only `tools/build_indicator.py` existed. The workflow, the
+  `results/` output paths, the step summary and the auto-commit step were all in
+  place; the scanner they invoke was missing, so every scheduled run died at the
+  scan step. `ironman_scanner.py` is now implemented.
+
+### Added
+- `ironman_scanner.py` — headless scanner CLI, invoked by the workflow with the
+  flags it already passed (`--interval --lookback --low --high --workers --csv
+  --md`). Standard library only, so no `pip install` step is needed.
+- `ironman/` — the engine (`engine.py`), bar providers (`datafeed.py`), report
+  rendering (`report.py`) and watchlist loading (`watchlist.py`). The engine is a
+  bar-by-bar port of `f_ironman_eval()`; `docs/SCANNER.md` documents the parity
+  rules and the deliberate deviations.
+- `tests/` — 93 offline tests (no network, no third-party packages) plus a
+  synthetic series module and a committed fixture.
+- `.github/workflows/tests.yml` — CI running the test suite, a `--check` pass on
+  the generator, a generated-file drift check on `indicators/`, and an offline
+  scanner smoke test.
+- `docs/SCANNER.md` — usage, parity table, trigger-window semantics, and an
+  explicit list of what is *not* verified.
+- Price-band gating in the scan: an out-of-band name can be scored but can never
+  trigger, matching `score >= 4 AND in_band` in the alert.
+
+### Notes
+- The scanner scores **closed bars only**; the still-forming candle is dropped by
+  the feed. The Pine indicator may score a forming bar.
+- `--lookback` ("confirmed candles in trigger window") is a scanner concept with
+  no Pine equivalent: a symbol triggers if any of the last N closed bars scored
+  ≥ 4 while in band, and the report says how fresh that trigger is.
+- Two upstream quirks are reproduced rather than fixed, so the scanner and the
+  indicator keep agreeing: a tier-3 climax bar can still score through the
+  `ema_rejection_bull` / `ema_rejection_bear` paths, and a tight box reads as
+  `CHOP` (which is why the box-breakout rule short-circuits the trend test).
+- Dead Pine variables (`rsi`, `neckline_res`, `neckline_sup`) are computed in the
+  indicator and never read; they are not ported.
+- The port is unit-tested per rule but has **not** been diffed against
+  TradingView. It lives on the public Yahoo chart endpoint, not TradingView data.
+
+### Not changed
+- The indicator itself. `python3 tools/build_indicator.py` regenerates
+  `indicators/ironman_v16_2_price_band_screener.pine` with no diff.
+
 ## v16.2 — Price band ₹1,000 to ₹10,000
 
 ### Added
