@@ -2,6 +2,53 @@
 
 All notable changes to the IronMan screener.
 
+## Unreleased — headless scanner + CI
+
+### Fixed
+- **`.github/workflows/main.yml` called a program that did not exist.**
+  The scheduled scan ran `python ironman_scanner.py`, but no such file was ever
+  committed — only `tools/build_indicator.py` existed. The workflow, the
+  `results/` output paths, the step summary and the auto-commit step were all in
+  place; the scanner they invoke was missing, so every scheduled run died at the
+  scan step. `ironman_scanner.py` is now implemented.
+
+### Added
+- `ironman_scanner.py` — headless scanner CLI, invoked by the workflow with the
+  flags it already passed (`--interval --lookback --low --high --workers --csv
+  --md`). Standard library only, so no `pip install` step is needed.
+- `ironman/` — the engine (`engine.py`), bar providers (`datafeed.py`), report
+  rendering (`report.py`) and watchlist loading (`watchlist.py`). The engine is a
+  bar-by-bar port of `f_ironman_eval()`; `docs/SCANNER.md` documents the parity
+  rules and the deliberate deviations.
+- `tests/` — 93 offline tests (no network, no third-party packages) plus a
+  synthetic series module and a committed fixture.
+- `.github/workflows/tests.yml` — CI running the test suite, a `--check` pass on
+  the generator, a generated-file drift check on `indicators/`, and an offline
+  scanner smoke test.
+- `docs/SCANNER.md` — usage, parity table, trigger-window semantics, and an
+  explicit list of what is *not* verified.
+- Price-band gating in the scan: an out-of-band name can be scored but can never
+  trigger, matching `score >= 4 AND in_band` in the alert.
+
+### Notes
+- The scanner scores **closed bars only**; the still-forming candle is dropped by
+  the feed. The Pine indicator may score a forming bar.
+- `--lookback` ("confirmed candles in trigger window") is a scanner concept with
+  no Pine equivalent: a symbol triggers if any of the last N closed bars scored
+  ≥ 4 while in band, and the report says how fresh that trigger is.
+- Two upstream quirks are reproduced rather than fixed, so the scanner and the
+  indicator keep agreeing: a tier-3 climax bar can still score through the
+  `ema_rejection_bull` / `ema_rejection_bear` paths, and a tight box reads as
+  `CHOP` (which is why the box-breakout rule short-circuits the trend test).
+- Dead Pine variables (`rsi`, `neckline_res`, `neckline_sup`) are computed in the
+  indicator and never read; they are not ported.
+- The port is unit-tested per rule but has **not** been diffed against
+  TradingView. It lives on the public Yahoo chart endpoint, not TradingView data.
+
+### Not changed
+- The indicator itself. `python3 tools/build_indicator.py` regenerates
+  `indicators/ironman_v16_2_price_band_screener.pine` with no diff.
+
 ## v16.2 — Price band ₹1,000 to ₹10,000
 
 ### Added

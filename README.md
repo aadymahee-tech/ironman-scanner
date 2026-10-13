@@ -31,8 +31,14 @@ Current build: **v16.2 — ₹1,000 to ₹10,000 price band**.
 | `tools/indicator_template.pine` | Pine template with `@@__TOKEN__@@` placeholders. |
 | `tools/build_indicator.py` | Generates the `.pine` file from the CSV. |
 | `data/fno_watchlist_price_band.csv` | **The watchlist.** This is the file you edit. |
+| `ironman_scanner.py` | **Headless scanner** — the same engine, run from the CLI or on a schedule. |
+| `ironman/` | Python port of the engine, the data feed and the report renderer. |
+| `tests/` | Offline test suite: no network, no third-party packages. |
 | `docs/LOGIC.md` | What every condition in the engine actually means. |
 | `docs/PRICE_BAND.md` | How the ₹1,000–10,000 filter works and how to change it. |
+| `docs/SCANNER.md` | The headless scanner: usage, parity with Pine, and its limits. |
+| `.github/workflows/main.yml` | Scheduled scan; commits `results/` back to the repo. |
+| `.github/workflows/tests.yml` | CI: test suite + generated-file drift check. |
 
 ---
 
@@ -133,6 +139,67 @@ To swap a name in you must swap one out — set `enabled=1` on the new row and
 `enabled=0` on the row you're dropping. `approx_price` in the CSV is just a
 reference note for you; it has **no runtime effect**, the live gate uses actual
 market prices.
+
+---
+
+## Headless scan (GitHub Actions)
+
+The indicator needs a chart open in your browser. `ironman_scanner.py` runs the
+same watchlist through the same engine from the command line, so a scheduled job
+can scan whether or not anyone is looking at a chart. See
+[`docs/SCANNER.md`](docs/SCANNER.md) for the full detail.
+
+```bash
+python3 ironman_scanner.py \
+  --interval 15m --lookback 2 \
+  --low 1000 --high 10000 \
+  --csv results/history/$(date -u +%F).csv \
+  --md  results/latest.md
+```
+
+`.github/workflows/main.yml` runs exactly that every 15 minutes from 08:45 to
+15:45 IST on weekdays, plus a closing scan at 15:35 IST, writes the summary to
+the Actions step summary, and commits `results/` back to the repo. Adjust it
+without touching the workflow by setting repository variables (Settings →
+Secrets and variables → Actions → Variables):
+
+| Variable | Default | Meaning |
+| --- | --- | --- |
+| `SCAN_INTERVAL` | `15m` | Candle size. |
+| `SCAN_LOOKBACK` | `2` | Closed candles in the trigger window. |
+| `SCAN_BAND_LOW` | `1000` | Price-band floor. |
+| `SCAN_BAND_HIGH` | `10000` | Price-band ceiling. |
+
+A symbol triggers when any bar in the window scores **≥ 4/5 while in band** — the
+same conjunction the alert requires. The report shows how fresh each trigger is:
+`latest closed bar` means it has just confirmed, `n bar(s) ago` means it is
+stale but still inside the window.
+
+Run it offline (no network) against the committed fixtures:
+
+```bash
+python3 ironman_scanner.py --source fixture --fixture tests/fixtures/engine.json \
+  --watchlist tests/fixtures/watchlist.csv --md - --quiet
+```
+
+It uses only the standard library, takes its bars from the public Yahoo Finance
+chart endpoint, and **never scores the still-forming candle** — a bar has to
+close before it can trigger.
+
+> The scanner has not been diffed against TradingView itself. Spot-check a
+> signal on a chart before acting on it.
+
+### Tests
+
+```bash
+python3 -m unittest discover -s tests -t .
+```
+
+93 tests covering the engine rules, the Pine conventions they depend on
+(`ta.ema` seeding, `ta.stdev` population bias, `na` semantics), the provider
+parsers, the report renderers, the watchlist guards, and an end-to-end CLI run.
+CI ([`tests.yml`](.github/workflows/tests.yml)) runs them on every push and PR,
+and also fails if `indicators/` is out of sync with the watchlist CSV.
 
 ---
 
