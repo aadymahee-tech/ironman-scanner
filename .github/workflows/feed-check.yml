@@ -42,7 +42,10 @@ jobs:
             --universe --source yahoo \
             --interval 15m --lookback 1 \
             --low 1000 --high 10000 \
-            --workers 8 --md - --verbose 2>&1 | tee /tmp/probe.log
+            --workers 8 \
+            --md - --verbose \
+            --csv /tmp/probe.csv \
+            --html /tmp/probe-dashboard.html 2>&1 | tee /tmp/probe.log
           code=${PIPESTATUS[0]}
           set -e
 
@@ -73,3 +76,15 @@ jobs:
 
           # Report-only by design: never fail the build from a third-party host.
           exit 0
+
+      # A dashboard built from live data, so a pull request can be reviewed
+      # against the real universe without anyone running it locally.
+      - name: Upload live dashboard
+        uses: actions/upload-artifact@v4
+        with:
+          name: ironman-live-dashboard
+          path: |
+            /tmp/probe-dashboard.html
+            /tmp/probe.csv
+          if-no-files-found: warn
+          retention-days: 14
