@@ -11,8 +11,13 @@ name: IronMan F&O Scan
 #  This job is a Python program, so it has no such ceiling.
 #
 #  Crontab is UTC. IST = UTC + 5:30, so:
-#    */15 3-9 * * 1-5  ->  every 15 min from 08:45 to 15:45 IST (Mon-Fri)
+#    */15 3-9 * * 1-5  ->  every 15 min from 08:30 to 15:15 IST (Mon-Fri)
 #    5 10 * * 1-5      ->  15:35 IST closing scan (Mon-Fri)
+#
+#  The intraday grid stops at 15:15 IST, so the last 15-minute candle
+#  (15:15-15:30) is picked up by the 15:35 closing scan. The 08:30 run lands
+#  before the open and therefore re-states the previous close.
+#
 #  GitHub schedules can drift by a few minutes at peak times; that is normal.
 #
 #  Customise without editing this file: create repository variables
