@@ -40,6 +40,12 @@ jobs:
             exit 1
           fi
 
+      # Best effort: NSE blocks some datacentre ranges, and a third-party host
+      # must not fail a build. If this reports drift, re-run the sync and commit.
+      - name: Check the F&O universe against NSE
+        continue-on-error: true
+        run: python tools/sync_universe.py --audit --check
+
       - name: Offline scanner smoke test
         run: |
           python ironman_scanner.py \
@@ -49,3 +55,20 @@ jobs:
             --interval 15m --lookback 2 --low 1000 --high 10000 \
             --md /tmp/latest.md --quiet
           grep -q "BOX BREAKOUT" /tmp/latest.md
+
+      - name: Offline dashboard smoke test
+        run: |
+          python ironman_scanner.py \
+            --universe --source fixture \
+            --fixture tests/fixtures/engine.json \
+            --interval 15m --lookback 2 --low 1000 --high 10000 \
+            --html /tmp/dashboard.html --quiet
+          # the full universe is scanned even though the fixture only covers 4 names
+          grep -q "IRONMAN" /tmp/dashboard.html
+          grep -q "/210 scanned" /tmp/dashboard.html
+          test "$(grep -c 'data-symbol=' /tmp/dashboard.html)" -eq 210
+          if grep -qE '(src|href)="https?://' /tmp/dashboard.html; then
+            echo "::error::dashboard must be self-contained (no external references)"
+            exit 1
+          fi
+          echo "dashboard: $(wc -c < /tmp/dashboard.html) bytes, all 210 rows present"

@@ -84,6 +84,53 @@ class TestFixtureRun(unittest.TestCase):
         self.assertIn("interval     : 15m  lookback 2", out)
 
 
+class TestDashboardFlag(unittest.TestCase):
+    def test_html_is_written(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "dashboard.html"
+            code, _, _ = run(*BASE, "--html", str(path), "--quiet")
+            self.assertEqual(code, 0)
+            html = path.read_text(encoding="utf-8")
+            self.assertTrue(html.lstrip().startswith("<!doctype html>"))
+            self.assertIn("BOX BREAKOUT", html)
+
+    def test_dashboard_can_be_written_alongside_csv_and_markdown(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            csv_path = Path(tmp) / "h.csv"
+            md_path = Path(tmp) / "latest.md"
+            html_path = Path(tmp) / "dashboard.html"
+            code, _, _ = run(*BASE, "--csv", str(csv_path), "--md", str(md_path),
+                             "--html", str(html_path), "--quiet")
+            self.assertEqual(code, 0)
+            for path in (csv_path, md_path, html_path):
+                self.assertTrue(path.exists(), path)
+
+
+class TestUniverseFlag(unittest.TestCase):
+    def test_scans_the_full_universe_file_not_the_watchlist(self):
+        # The small fixture only contains 4 of the 210 universe symbols; the rest
+        # fail to load, which is exactly what a partial feed looks like.
+        code, out, _ = run("--universe", "--source", "fixture", "--fixture", str(ENGINE_FIXTURE),
+                           "--md", "-", "--quiet")
+        self.assertEqual(code, 0)                      # some symbols did resolve
+        self.assertIn("/210 symbols scanned", out)
+        self.assertIn("fetch failure(s)", out)
+
+    def test_universe_dashboard_lists_every_row(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "d.html"
+            run("--universe", "--source", "fixture", "--fixture", str(ENGINE_FIXTURE),
+                "--html", str(path), "--quiet")
+            body = path.read_text(encoding="utf-8").split('<table id="universe">')[1]
+            body = body.split("</table>")[0]
+            self.assertEqual(body.count("data-symbol="), 210)
+
+    def test_explicit_watchlist_still_wins(self):
+        code, out, _ = run(*BASE, "--md", "-", "--quiet")
+        self.assertEqual(code, 0)
+        self.assertIn("/4 symbols scanned", out)
+
+
 class TestFailureHandling(unittest.TestCase):
     def test_symbol_missing_from_the_feed_is_reported_not_fatal(self):
         # Only NSE:INFY is in this fixture; the other three fail to load.

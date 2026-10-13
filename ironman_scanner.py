@@ -34,6 +34,7 @@ ROOT = Path(__file__).resolve().parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from ironman.dashboard import render_dashboard  # noqa: E402
 from ironman.datafeed import INTERVALS, fetch_yahoo, load_fixture  # noqa: E402
 from ironman.engine import Bar, SymbolScan, scan_symbol  # noqa: E402
 from ironman.report import (  # noqa: E402
@@ -44,7 +45,7 @@ from ironman.report import (  # noqa: E402
     render_markdown,
     write_markdown,
 )
-from ironman.watchlist import load_watchlist  # noqa: E402
+from ironman.watchlist import load_universe, load_watchlist  # noqa: E402
 
 
 @dataclass
@@ -73,8 +74,14 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
                     help="append per-symbol rows to this CSV (created if missing)")
     ap.add_argument("--md", default=None,
                     help="write the markdown summary here; '-' for stdout")
+    ap.add_argument("--html", type=Path, default=None,
+                    help="write a self-contained HTML dashboard here")
+    ap.add_argument("--universe", action="store_true",
+                    help="scan the full F&O universe (data/fno_universe.csv, 210+ symbols) "
+                         "instead of the 40-name price-band watchlist")
     ap.add_argument("--watchlist", default=None,
-                    help="watchlist CSV (default: data/fno_watchlist_price_band.csv)")
+                    help="symbol list to scan (default: data/fno_watchlist_price_band.csv, "
+                         "or data/fno_universe.csv with --universe)")
     ap.add_argument("--source", choices=("yahoo", "fixture"), default="yahoo",
                     help="where bars come from (default: yahoo)")
     ap.add_argument("--fixture", default=None,
@@ -142,9 +149,10 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     started = datetime.now(timezone.utc)
 
-    watchlist = load_watchlist(args.watchlist)
+    watchlist = load_universe(args.watchlist) if args.universe else load_watchlist(args.watchlist)
+    listing = "F&O universe" if args.universe else "price-band watchlist"
     if not args.quiet:
-        print(f"watchlist    : {len(watchlist)} enabled symbol(s)", file=sys.stderr)
+        print(f"{listing:<13}: {len(watchlist)} enabled symbol(s)", file=sys.stderr)
 
     fetched = {f.symbol: f for f in fetch_all(watchlist, args)}
 
@@ -208,6 +216,11 @@ def main(argv: Optional[List[str]] = None) -> int:
         write_markdown(Path(args.md), markdown)
         if not args.quiet:
             print(f"wrote        : {Path(args.md)}", file=sys.stderr)
+
+    if args.html:
+        write_markdown(Path(args.html), render_dashboard(report))
+        if not args.quiet:
+            print(f"wrote        : {Path(args.html)}", file=sys.stderr)
 
     print(console_summary(report))
 

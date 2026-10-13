@@ -11,10 +11,10 @@ NSE:TCS,Tata Consultancy Services,IT,3000,1
 NSE:INFY,Infosys,IT,1500,1
 NSE:HCLTECH,HCL Technologies,IT,1600,1
 NSE:TECHM,Tech Mahindra,IT,1600,1
-NSE:LTIM,LTIMindtree,IT,5500,1
+NSE:LTM,LTIMindtree,IT,5500,1
 NSE:PERSISTENT,Persistent Systems,IT,5500,1
 NSE:MPHASIS,Mphasis,IT,2800,1
-NSE:LTTS,L&T Technology Services,IT,4200,1
+NSE:LTTS,L&T Technology Services,IT,4200,0
 NSE:TATAELXSI,Tata Elxsi,IT,6000,1
 NSE:COFORGE,Coforge,IT,1700,1
 NSE:SUNPHARMA,Sun Pharmaceutical,Pharma & Healthcare,1800,1
@@ -23,7 +23,7 @@ NSE:DRREDDY,Dr. Reddy's Laboratories,Pharma & Healthcare,1250,1
 NSE:CIPLA,Cipla,Pharma & Healthcare,1500,1
 NSE:LUPIN,Lupin,Pharma & Healthcare,2000,1
 NSE:APOLLOHOSP,Apollo Hospitals,Pharma & Healthcare,7200,1
-NSE:M_M,Mahindra & Mahindra,Auto & Ancillaries,3000,1
+NSE:M&M,Mahindra & Mahindra,Auto & Ancillaries,3000,1
 NSE:BAJAJ-AUTO,Bajaj Auto,Auto & Ancillaries,9000,1
 NSE:TVSMOTOR,TVS Motor,Auto & Ancillaries,2800,1
 NSE:EICHERMOT,Eicher Motors,Auto & Ancillaries,5000,1

@@ -1,0 +1,15 @@
+UNDERLYING                          ,SYMBOL    ,SEP-26     ,OCT-26     ,NOV-26
+NIFTY 50                            ,NIFTY     ,65         ,65         ,65
+NIFTY BANK                          ,BANKNIFTY ,30         ,30         ,
+NIFTY FINANCIAL SERVICES            ,FINNIFTY  ,60         ,60         ,
+NIFTY MID SELECT                    ,MIDCPNIFTY,120        ,120        ,
+NIFTY NEXT 50                       ,NIFTYNXT50,25         ,25         ,
+NIFTY FPI 150                       ,NIFTYFPI  ,1100       ,1100       ,
+Derivatives on Individual Securities,Symbol    ,SEP-26     ,OCT-26     ,NOV-26
+360 ONE WAM LIMITED                 ,360ONE    ,500        ,500        ,500
+MAHINDRA & MAHINDRA LTD             ,M&M       ,200        ,200        ,200
+GE VERNOVA T&D INDIA LTD            ,GVT&D     ,100        ,100        ,100
+RELIANCE INDUSTRIES LTD             ,RELIANCE  ,500        ,500        ,500
+CROMPT GREA CON ELEC LTD            ,CROMPTON  ,2900       ,2900       ,
+DIVI S LABORATORIES LTD             ,DIVISLAB  ,1000       ,1000       ,
+                                    ,          ,           ,           ,

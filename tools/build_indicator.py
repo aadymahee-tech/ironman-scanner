@@ -37,13 +37,21 @@ DEFAULT_OUT = ROOT / "indicators" / "ironman_v16_2_price_band_screener.pine"
 MAX_SECURITY_CALLS = 40   # Pine Script v5 hard limit
 ARRAY_FROM_CHUNK = 10     # keep every array.from() call well under its max arity
 
-SYMBOL_RE = re.compile(r"^[A-Z0-9_.\-]+:[A-Z0-9_.\-]+$")
+# "&" is a legitimate NSE ticker character: M&M (Mahindra & Mahindra) and
+# GVT&D (GE Vernova T&D India) are both in the F&O universe.
+SYMBOL_RE = re.compile(r"^[A-Z0-9_.\-&]+:[A-Z0-9_.\-&]+$")
 
 
 # --------------------------------------------------------------------------- #
 # Watchlist
 # --------------------------------------------------------------------------- #
-def load_watchlist(path: Path) -> list[dict]:
+def load_watchlist(path: Path, max_symbols: int | None = MAX_SECURITY_CALLS) -> list[dict]:
+    """Load and validate a watchlist CSV.
+
+    ``max_symbols`` defaults to the Pine ceiling. The headless scanner passes
+    ``None`` because it is not a Pine script — it runs over the full F&O
+    universe, which is far larger than 40.
+    """
     if not path.exists():
         sys.exit(f"ERROR: watchlist not found: {path}")
 
@@ -53,7 +61,9 @@ def load_watchlist(path: Path) -> list[dict]:
     if not rows:
         sys.exit(f"ERROR: {path} is empty")
 
-    required = {"symbol", "name", "sector", "approx_price", "enabled"}
+    # approx_price is documentation only and has no runtime effect, so it is not
+    # required - the full-universe file does not carry it.
+    required = {"symbol", "name", "sector", "enabled"}
     missing = required - set(rows[0].keys())
     if missing:
         sys.exit(f"ERROR: {path} missing columns: {sorted(missing)}")
@@ -70,11 +80,11 @@ def load_watchlist(path: Path) -> list[dict]:
             sys.exit(f"ERROR: duplicate symbol {sym}")
         seen.add(sym)
 
-    if len(enabled) > MAX_SECURITY_CALLS:
+    if max_symbols is not None and len(enabled) > max_symbols:
         sys.exit(
             f"ERROR: {len(enabled)} symbols enabled but Pine allows at most "
-            f"{MAX_SECURITY_CALLS} request.security() calls. Set enabled=0 on "
-            f"{len(enabled) - MAX_SECURITY_CALLS} row(s)."
+            f"{max_symbols} request.security() calls. Set enabled=0 on "
+            f"{len(enabled) - max_symbols} row(s)."
         )
 
     # Sort for a stable, reviewable diff: sector order preserved from CSV, A-Z inside.

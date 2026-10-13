@@ -2,8 +2,8 @@ name: Live feed check
 
 # The scan itself (main.yml) is scheduled, so a broken live feed would only be
 # noticed on the next tick — and if the feed breaks, nothing gets committed and
-# the failure mode is a silent gap in results/. This checks a handful of symbols
-# against the live provider on every PR and on demand.
+# the failure mode is a silent gap in results/. This checks the live provider on
+# every PR and on demand.
 #
 # It is deliberately REPORT-ONLY: the provider is an unofficial, rate-limited
 # endpoint, and a flaky third-party host must never block a merge. Treat the
@@ -29,55 +29,46 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Probe the live provider (informational)
+      - name: Probe the full F&O universe (informational)
         run: |
-          cat > /tmp/probe.csv <<'CSV'
-          symbol,name,sector,approx_price,enabled
-          NSE:INFY,Infosys,IT,1500,1
-          NSE:HDFCBANK,HDFC Bank,Banking & Finance,1000,1
-          NSE:HAL,Hindustan Aeronautics,Diversified & Infra,4200,1
-          CSV
-
           {
-            echo "### Live feed check"
+            echo "### Live feed check — full F&O universe"
             echo
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
           set +e
           python ironman_scanner.py \
-            --source yahoo --watchlist /tmp/probe.csv \
+            --universe --source yahoo \
             --interval 15m --lookback 1 \
-            --low 0 --high 1000000 \
-            --workers 3 --md - --verbose 2>&1 | tee /tmp/probe.log
+            --low 1000 --high 10000 \
+            --workers 8 --md - --verbose 2>&1 | tee /tmp/probe.log
           code=${PIPESTATUS[0]}
           set -e
 
           scanned=$(grep -oE 'scanned +: [0-9]+/[0-9]+ symbols' /tmp/probe.log | tail -1 || true)
-          bars=$(grep -cE '· NSE:' /tmp/probe.log || true)
-          failures=$(grep -cE '! NSE:' /tmp/probe.log || true)
+          ok=$(grep -cE '· NSE:' /tmp/probe.log || true)
+          bad=$(grep -cE '! NSE:' /tmp/probe.log || true)
+
+          # Which names failed, so a provider or ticker problem is actionable.
+          failures=$(grep -oE '! NSE:[A-Z0-9_.&-]+' /tmp/probe.log | sed 's/! //' | sort -u | head -25 || true)
 
           {
             echo '```'
             echo
             echo "${scanned:-scanner produced no summary}"
-            echo "symbols returning bars: ${bars}   symbols failing: ${failures}"
+            echo "resolved: ${ok}   failed: ${bad}"
+            if [ -n "$failures" ]; then
+              echo
+              echo "Failed symbols:"
+              echo "$failures"
+            fi
           } >> "$GITHUB_STEP_SUMMARY"
 
-          # One compact line of real engine output, parsed from the markdown the
-          # scanner just produced: symbol, rating and regime. This is what makes
-          # the check worth reading — it proves live bars flow through the whole
-          # engine, not just that HTTP worked.
-          engine_out=$(grep -E '^\| .*NSE:' /tmp/probe.log \
-            | awk -F'|' '{gsub(/[* ]/,"",$2); gsub(/ /,"",$5); gsub(/ /,"",$6); gsub(/ /,"",$7); printf "%s=%s %s %s  ", $2, $5, $6, $7}' \
-            | head -c 400 || true)
-
-          # A single annotation line, so the outcome is visible in the checks UI
-          # (and to automation) without opening the log.
-          if [ "$code" -eq 0 ] && [ "${bars:-0}" -gt 0 ]; then
-            echo "::notice title=Live feed check::${scanned}; ${bars} symbol(s) returned bars from the live provider. ${engine_out}"
+          if [ "$code" -eq 0 ] && [ "${ok:-0}" -gt 0 ]; then
+            echo "::notice title=Live feed check::${scanned}; ${ok} symbol(s) resolved from the live provider, ${bad} failed."
           else
-            echo "::warning title=Live feed check::exit ${code}, ${bars} symbol(s) returned bars, ${failures} failed. Not blocking: the endpoint is unofficial and rate-limited. If this persists, its response shape may have changed."
+            echo "::warning title=Live feed check::exit ${code}, ${ok} resolved, ${bad} failed. Not blocking: the endpoint is unofficial and rate-limited. If this persists, its response shape or the symbol mapping may have changed."
           fi
 
           # Report-only by design: never fail the build from a third-party host.
