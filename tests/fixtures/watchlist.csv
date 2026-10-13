@@ -1,0 +1,6 @@
+symbol,name,sector,approx_price,enabled
+NSE:TATAELXSI,Tata Elxsi,IT,6100,1
+NSE:HAL,Hindustan Aeronautics,Diversified & Infra,4200,1
+NSE:INFY,Infosys,IT,1500,1
+NSE:HDFCBANK,HDFC Bank,Banking & Finance,1000,1
+NSE:SBIN,State Bank of India,Banking & Finance,800,0
