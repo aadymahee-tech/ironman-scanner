@@ -1,0 +1,287 @@
+//@version=5
+indicator("IronMan v16.1 - Sorted F&O Screener", overlay=true)
+
+// ========================================================================= //
+// 1. INPUTS & WATCHLIST CONFIGURATION
+// ========================================================================= //
+grp_ui       = "Screener Table Settings"
+table_pos    = input.string(position.top_right, "Table Position", options=[position.top_right, position.bottom_right, position.top_left, position.bottom_left], group=grp_ui)
+table_size   = input.string("Normal", "Text Size", options=["Small", "Normal", "Large"], group=grp_ui)
+
+grp_list = "F&O Watchlist Symbols (Top 30)"
+s01 = input.symbol("NSE:RELIANCE", "Stock 01", group=grp_list)
+s02 = input.symbol("NSE:HDFCBANK", "Stock 02", group=grp_list)
+s03 = input.symbol("NSE:ICICIBANK", "Stock 03", group=grp_list)
+s04 = input.symbol("NSE:INFY", "Stock 04", group=grp_list)
+s05 = input.symbol("NSE:TCS", "Stock 05", group=grp_list)
+s06 = input.symbol("NSE:SBIN", "Stock 06", group=grp_list)
+s07 = input.symbol("NSE:BHARTIARTL", "Stock 07", group=grp_list)
+s08 = input.symbol("NSE:TATAMOTORS", "Stock 08", group=grp_list)
+s09 = input.symbol("NSE:AXISBANK", "Stock 09", group=grp_list)
+s10 = input.symbol("NSE:KOTAKBANK", "Stock 10", group=grp_list)
+s11 = input.symbol("NSE:LT", "Stock 11", group=grp_list)
+s12 = input.symbol("NSE:ITC", "Stock 12", group=grp_list)
+s13 = input.symbol("NSE:HINDUNILVR", "Stock 13", group=grp_list)
+s14 = input.symbol("NSE:BAJFINANCE", "Stock 14", group=grp_list)
+s15 = input.symbol("NSE:MARUTI", "Stock 15", group=grp_list)
+s16 = input.symbol("NSE:SUNPHARMA", "Stock 16", group=grp_list)
+s17 = input.symbol("NSE:TATASTEEL", "Stock 17", group=grp_list)
+s18 = input.symbol("NSE:ULTRACEMCO", "Stock 18", group=grp_list)
+s19 = input.symbol("NSE:TITAN", "Stock 19", group=grp_list)
+s20 = input.symbol("NSE:M_M", "Stock 20", group=grp_list)
+s21 = input.symbol("NSE:NTPC", "Stock 21", group=grp_list)
+s22 = input.symbol("NSE:POWERGRID", "Stock 22", group=grp_list)
+s23 = input.symbol("NSE:LTIM", "Stock 23", group=grp_list)
+s24 = input.symbol("NSE:ADANIENT", "Stock 24", group=grp_list)
+s25 = input.symbol("NSE:ADANIPORTS", "Stock 25", group=grp_list)
+s26 = input.symbol("NSE:COALINDIA", "Stock 26", group=grp_list)
+s27 = input.symbol("NSE:ONGC", "Stock 27", group=grp_list)
+s28 = input.symbol("NSE:JSWSTEEL", "Stock 28", group=grp_list)
+s29 = input.symbol("NSE:TATACHEM", "Stock 29", group=grp_list)
+s30 = input.symbol("NSE:NIFTY", "Stock 30", group=grp_list)
+
+// ========================================================================= //
+// 2. V16.1 ISOLATED EVALUATION ENGINE (NO NESTED SECURITY)
+// ========================================================================= //
+f_ironman_eval() =>
+    total_range = high - low
+    body        = math.abs(close - open)
+    wick_up     = high - math.max(close, open)
+    wick_down   = math.min(close, open) - low
+    body_ratio  = total_range > 0 ? (body / total_range) : 0.0
+
+    rsi = ta.rsi(close, 14)
+
+    mean_range   = ta.sma(total_range, 20)
+    stdev_range  = ta.stdev(total_range, 20)
+    z_range      = stdev_range > 0 ? (total_range - mean_range) / stdev_range : 0.0
+
+    is_tier3_climax  = z_range >= 3.5
+    is_tier2_power   = z_range >= 1.5 and not is_tier3_climax
+
+    net_change_20 = math.abs(close - close[20])
+    sum_ranges_20 = math.sum(total_range, 20)
+    er_20         = sum_ranges_20 > 0 ? (net_change_20 / sum_ranges_20) : 0.0
+    is_statistical_chop = er_20 < 0.25
+
+    ema20  = ta.ema(close, 20)
+    ema100 = ta.ema(close, 100)
+
+    stdev_price_100 = ta.stdev(close, 100)
+    z_dist          = stdev_price_100 > 0 ? (close - ema100) / stdev_price_100 : 0.0
+
+    is_extended_uptrend   = z_dist >= 2.0
+    is_extended_downtrend = z_dist <= -2.0
+
+    bar_energy = total_range * volume
+    re_ratio   = bar_energy[1] > 0 ? (bar_energy / bar_energy[1]) : 0.0
+
+    req_body_ratio  = is_tier2_power ? 0.60 : 0.80
+    close_near_high = close >= (high - total_range * 0.20)
+    close_near_low  = close <= (low + total_range * 0.20)
+
+    is_strong_bull = (close > open) and (body_ratio >= req_body_ratio or is_tier2_power) and close_near_high and not is_tier3_climax
+    is_strong_bear = (close < open) and (body_ratio >= req_body_ratio or is_tier2_power) and close_near_low  and not is_tier3_climax
+
+    is_open_eq_low  = (math.abs(open - low) <= (total_range * 0.04)) and (close > open) and not is_tier3_climax
+    is_open_eq_high = (math.abs(open - high) <= (total_range * 0.04)) and (close < open) and not is_tier3_climax
+
+    is_bear_rejection_drive = (wick_up >= total_range * 0.25) and close_near_low and (wick_down <= total_range * 0.10) and (close < open) and not is_tier3_climax
+    is_bull_rejection_drive = (wick_down >= total_range * 0.25) and close_near_high and (wick_up <= total_range * 0.10) and (close > open) and not is_tier3_climax
+
+    is_marubozu_bear = is_strong_bear and (wick_up <= total_range * 0.05) and (wick_down <= total_range * 0.05)
+    is_marubozu_bull = is_strong_bull and (wick_up <= total_range * 0.05) and (wick_down <= total_range * 0.05)
+    is_shooting_star = (wick_up >= body * 1.8) and (wick_down <= body * 0.3) and (close < open)
+    is_hammer        = (wick_down >= body * 1.8) and (wick_up <= body * 0.3) and (close > open)
+
+    vol_ma   = ta.sma(volume, 20)
+    high_vol = volume > vol_ma
+
+    ema_cross     = ta.cross(ema20, ema100)
+    crosses_in_40 = ta.cum(ema_cross ? 1 : 0) - ta.cum(ema_cross[40] ? 1 : 0)
+    is_entangled  = crosses_in_40 > 1
+
+    ema20_slope_up = ema20 > ema20[3]
+    ema20_slope_dn = ema20 < ema20[3]
+
+    strict_bull_trend = (close > ema100) and (ema20 > ema100) and ema20_slope_up and not is_entangled and not is_statistical_chop
+    strict_bear_trend = (close < ema100) and (ema20 < ema100) and ema20_slope_dn and not is_entangled and not is_statistical_chop
+
+    dist_low_ema20   = math.abs(low - ema20) / ema20 * 100
+    dist_low_ema100  = math.abs(low - ema100) / ema100 * 100
+    near_long_ema    = (low <= ema20 and high >= ema20) or (dist_low_ema20 <= 0.05) or (dist_low_ema100 <= 0.05)
+    
+    dist_high_ema20  = math.abs(high - ema20) / ema20 * 100
+    dist_high_ema100 = math.abs(high - ema100) / ema100 * 100
+    near_short_ema   = (high >= ema20 and low <= ema20) or (dist_high_ema20 <= 0.05) or (dist_high_ema100 <= 0.05)
+
+    ema_rejection_bull = near_long_ema and (close > open)
+    ema_rejection_bear = near_short_ema and (close < open)
+
+    // Intraday Daily High/Low Tracker (Avoids Nested Security Calls)
+    var float daily_h = na
+    var float daily_l = na
+    var float cd_h = na
+    var float cd_l = na
+    if ta.change(time("D")) != 0
+        daily_h := cd_h
+        daily_l := cd_l
+        cd_h := high
+        cd_l := low
+    else
+        cd_h := math.max(nz(cd_h, high), high)
+        cd_l := math.min(nz(cd_l, low), low)
+
+    box_high       = ta.highest(high[1], 20)
+    box_low        = ta.lowest(low[1], 20)
+    box_height_pct = (box_high - box_low) / close * 100
+
+    is_valid_box      = box_height_pct <= 1.50
+    box_breakout_long = is_valid_box and (close > box_high) and (close > open) and (is_tier2_power or is_strong_bull or is_open_eq_low) and high_vol
+    box_breakout_short= is_valid_box and (close < box_low)  and (close < open) and (is_tier2_power or is_strong_bear or is_open_eq_high) and high_vol
+
+    ph = ta.pivothigh(high, 5, 5)
+    pl = ta.pivotlow(low, 5, 5)
+    var float neckline_res = na
+    var float neckline_sup = na
+    if not na(ph)
+        neckline_res := ph
+    if not na(pl)
+        neckline_sup := pl
+
+    pdl_swept_red   = (low[1] <= daily_l) and (close[1] < open[1])
+    has_power_bull  = (re_ratio >= 1.25 or z_range >= 1.0 or is_open_eq_low) and high_vol
+    nullify_bull_2a = is_extended_downtrend and pdl_swept_red and has_power_bull and (close > high[1]) and (close > open)
+
+    pdh_swept_green = (high[1] >= daily_h) and (close[1] > open[1])
+    has_power_bear  = (re_ratio >= 1.25 or z_range >= 1.0 or is_open_eq_high) and high_vol
+    nullify_bear_2a = is_extended_uptrend and pdh_swept_green and has_power_bear and (close < low[1]) and (close < open)
+
+    highest_high_2 = ta.highest(high[1], 2)
+    lowest_low_2   = ta.lowest(low[1], 2)
+
+    score_cont_long = 0
+    if box_breakout_long
+        score_cont_long := 5
+    else if strict_bull_trend and (near_long_ema or near_long_ema[1])
+        valid_bar = is_tier2_power or is_strong_bull or is_open_eq_low or is_marubozu_bull or is_hammer or ema_rejection_bull or is_bull_rejection_drive
+        if valid_bar
+            score_cont_long += 2
+            if high_vol
+                score_cont_long += 1
+            if close > highest_high_2
+                score_cont_long += 1
+            if body_ratio >= 0.65 or (low <= ema100 and high >= ema100)
+                score_cont_long += 1
+
+    score_cont_short = 0
+    if box_breakout_short
+        score_cont_short := 5
+    else if strict_bear_trend and (near_short_ema or near_short_ema[1])
+        valid_bar = is_tier2_power or is_strong_bear or is_open_eq_high or is_marubozu_bear or is_shooting_star or ema_rejection_bear or is_bear_rejection_drive
+        if valid_bar
+            score_cont_short += 2
+            if high_vol
+                score_cont_short += 1
+            if close < lowest_low_2
+                score_cont_short += 1
+            if body_ratio >= 0.65 or (high >= ema100 and low <= ema100)
+                score_cont_short += 1
+
+    score_rev_long  = nullify_bull_2a ? 5 : 0
+    score_rev_short = nullify_bear_2a ? 5 : 0
+
+    max_score = math.max(score_cont_short, score_cont_long, score_rev_short, score_rev_long)
+
+    active_name = "None"
+    if max_score == score_cont_short and score_cont_short >= 4
+        active_name := box_breakout_short ? "BOX BREAKDOWN" : "SHORT CONT"
+    else if max_score == score_cont_long and score_cont_long >= 4
+        active_name := box_breakout_long ? "BOX BREAKOUT" : "LONG CONT"
+    else if max_score == score_rev_short and score_rev_short >= 4
+        active_name := "SHORT 2A SWEEP"
+    else if max_score == score_rev_long and score_rev_long >= 4
+        active_name := "LONG 2A SWEEP"
+
+    trend_txt = is_statistical_chop or is_entangled ? "CHOP" : is_extended_uptrend ? "EXT BULL" : is_extended_downtrend ? "EXT BEAR" : strict_bull_trend ? "BULLISH" : strict_bear_trend ? "BEARISH" : "SIDEWAYS"
+
+    [active_name, max_score, trend_txt]
+
+// ========================================================================= //
+// 3. MULTI-SYMBOL DATA FETCHING
+// ========================================================================= //
+get_data(sym) => request.security(sym, timeframe.period, f_ironman_eval())
+
+[act01, sc01, tr01] = get_data(s01)
+[act02, sc02, tr02] = get_data(s02)
+[act03, sc03, tr03] = get_data(s03)
+[act04, sc04, tr04] = get_data(s04)
+[act05, sc05, tr05] = get_data(s05)
+[act06, sc06, tr06] = get_data(s06)
+[act07, sc07, tr07] = get_data(s07)
+[act08, sc08, tr08] = get_data(s08)
+[act09, sc09, tr09] = get_data(s09)
+[act10, sc10, tr10] = get_data(s10)
+[act11, sc11, tr11] = get_data(s11)
+[act12, sc12, tr12] = get_data(s12)
+[act13, sc13, tr13] = get_data(s13)
+[act14, sc14, tr14] = get_data(s14)
+[act15, sc15, tr15] = get_data(s15)
+[act16, sc16, tr16] = get_data(s16)
+[act17, sc17, tr17] = get_data(s17)
+[act18, sc18, tr18] = get_data(s18)
+[act19, sc19, tr19] = get_data(s19)
+[act20, sc20, tr20] = get_data(s20)
+[act21, sc21, tr21] = get_data(s21)
+[act22, sc22, tr22] = get_data(s22)
+[act23, sc23, tr23] = get_data(s23)
+[act24, sc24, tr24] = get_data(s24)
+[act25, sc25, tr25] = get_data(s25)
+[act26, sc26, tr26] = get_data(s26)
+[act27, sc27, tr27] = get_data(s27)
+[act28, sc28, tr28] = get_data(s28)
+[act29, sc29, tr29] = get_data(s29)
+[act30, sc30, tr30] = get_data(s30)
+
+bool any_signal_triggered = (sc01>=4 or sc02>=4 or sc03>=4 or sc04>=4 or sc05>=4 or sc06>=4 or sc07>=4 or sc08>=4 or sc09>=4 or sc10>=4 or sc11>=4 or sc12>=4 or sc13>=4 or sc14>=4 or sc15>=4 or sc16>=4 or sc17>=4 or sc18>=4 or sc19>=4 or sc20>=4 or sc21>=4 or sc22>=4 or sc23>=4 or sc24>=4 or sc25>=4 or sc26>=4 or sc27>=4 or sc28>=4 or sc29>=4 or sc30>=4)
+alertcondition(any_signal_triggered, title="IronMan Watchlist Alert", message="IronMan Signal Triggered on Watchlist!")
+
+// ========================================================================= //
+// 4. DYNAMIC SORTING & SCREENER RENDERING
+// ========================================================================= //
+txt_size = table_size == "Small" ? size.small : table_size == "Large" ? size.large : size.normal
+
+var table sc = table.new(table_pos, 4, 32, bgcolor=color.new(#111111, 10), border_width=1, border_color=color.gray)
+
+if barstate.islast
+    // Load Arrays
+    syms = array.from(s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s25, s26, s27, s28, s29, s30)
+    scrs = array.from(sc01, sc02, sc03, sc04, sc05, sc06, sc07, sc08, sc09, sc10, sc11, sc12, sc13, sc14, sc15, sc16, sc17, sc18, sc19, sc20, sc21, sc22, sc23, sc24, sc25, sc26, sc27, sc28, sc29, sc30)
+    acts = array.from(act01, act02, act03, act04, act05, act06, act07, act08, act09, act10, act11, act12, act13, act14, act15, act16, act17, act18, act19, act20, act21, act22, act23, act24, act25, act26, act27, act28, act29, act30)
+    trns = array.from(tr01, tr02, tr03, tr04, tr05, tr06, tr07, tr08, tr09, tr10, tr11, tr12, tr13, tr14, tr15, tr16, tr17, tr18, tr19, tr20, tr21, tr22, tr23, tr24, tr25, tr26, tr27, tr28, tr29, tr30)
+
+    // Sort by Score (Descending) - Pushes Active Signals to Top
+    indices = array.sort_indices(scrs, order.descending)
+
+    // Header
+    table.cell(sc, 0, 0, "F&O Symbol", text_color=color.white, bgcolor=color.blue, text_size=txt_size)
+    table.cell(sc, 1, 0, "Setup", text_color=color.white, bgcolor=color.blue, text_size=txt_size)
+    table.cell(sc, 2, 0, "Rating", text_color=color.white, bgcolor=color.blue, text_size=txt_size)
+    table.cell(sc, 3, 0, "Context", text_color=color.white, bgcolor=color.blue, text_size=txt_size)
+
+    // Render Rows
+    for i = 0 to 29
+        idx = array.get(indices, i)
+        c_sym = str.replace(array.get(syms, idx), "NSE:", "")
+        c_scr = array.get(scrs, idx)
+        c_act = array.get(acts, idx)
+        c_trn = array.get(trns, idx)
+        
+        is_act = c_scr >= 4
+        bg_col = is_act ? (str.contains(c_act, "SHORT") or str.contains(c_act, "BREAKDOWN") ? color.red : color.green) : color.new(color.gray, 50)
+        tr_col = c_trn == "CHOP" ? color.orange : (str.contains(c_trn, "BULL") ? color.green : str.contains(c_trn, "BEAR") ? color.red : color.gray)
+        
+        table.cell(sc, 0, i+1, c_sym, text_color=color.white, bgcolor=color.black, text_size=txt_size)
+        table.cell(sc, 1, i+1, c_act, text_color=color.white, bgcolor=bg_col, text_size=txt_size)
+        table.cell(sc, 2, i+1, str.tostring(c_scr) + "/5", text_color=color.white, bgcolor=is_act ? color.green : color.new(color.gray, 50), text_size=txt_size)
+        table.cell(sc, 3, i+1, c_trn, text_color=color.white, bgcolor=tr_col, text_size=txt_size)

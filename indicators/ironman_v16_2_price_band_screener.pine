@@ -1,0 +1,424 @@
+//@version=5
+// ========================================================================= //
+//  IronMan v16.2 - Sorted F&O Screener  (₹1,000 - ₹10,000 price band)
+// ------------------------------------------------------------------------ //
+//  GENERATED FILE - DO NOT EDIT BY HAND
+//  Source of truth : data/fno_watchlist_price_band.csv
+//  Generator       : python3 tools/build_indicator.py
+// ------------------------------------------------------------------------ //
+//  v16.2 adds a runtime price-band gate on top of the v16.1 engine:
+//    * Only stocks whose CURRENT price sits inside [Min Price, Max Price]
+//      can produce a rating, appear as an active setup, or fire the alert.
+//    * Out-of-band names can be hidden, blanked, or kept - your choice.
+//  The v16.1 candle / trend / sweep logic is otherwise untouched.
+// ========================================================================= //
+indicator("IronMan v16.2 - Sorted F&O Screener (₹1k-10k)", overlay=true)
+
+// ========================================================================= //
+// 1. INPUTS & WATCHLIST CONFIGURATION
+// ========================================================================= //
+grp_ui       = "Screener Table Settings"
+table_pos    = input.string(position.top_right, "Table Position", options=[position.top_right, position.bottom_right, position.top_left, position.bottom_left], group=grp_ui)
+table_size   = input.string("Normal", "Text Size", options=["Small", "Normal", "Large"], group=grp_ui)
+
+grp_band = "Price Band Filter (₹)  <-- v16.2"
+min_price = input.float(1000.0, "Min Price (₹)",  minval=0.0, step=50.0,  group=grp_band, tooltip="Stocks trading BELOW this price are treated as out-of-band.")
+max_price = input.float(10000.0, "Max Price (₹)", minval=0.0, step=100.0, group=grp_band, tooltip="Stocks trading ABOVE this price are treated as out-of-band.")
+oor_mode   = input.string("Hide out-of-range rows", "Out-of-band handling",
+     options=["Hide out-of-range rows", "Blank row (no signal)", "Keep score, mark row"],
+     group=grp_band,
+     tooltip="Hide = row removed from the table entirely. Blank row = shown with 'OUT OF RANGE' and 0/5. Keep score = shown with its real rating but the Context column is tagged OUT OF RANGE.")
+show_price = input.bool(true, "Show Price column", group=grp_band, tooltip="Adds a live LTP column so you can see exactly where each name sits inside the band.")
+
+grp_list = "F&O Watchlist - ₹1,000 to ₹10,000 band (40 / 40 slots)"
+s01 = input.symbol("NSE:AXISBANK", "Stock 01  -  Axis Bank", group=grp_list)
+s02 = input.symbol("NSE:BAJAJFINSV", "Stock 02  -  Bajaj Finserv", group=grp_list)
+s03 = input.symbol("NSE:BAJFINANCE", "Stock 03  -  Bajaj Finance", group=grp_list)
+s04 = input.symbol("NSE:HDFCBANK", "Stock 04  -  HDFC Bank", group=grp_list)
+s05 = input.symbol("NSE:ICICIBANK", "Stock 05  -  ICICI Bank", group=grp_list)
+s06 = input.symbol("NSE:KOTAKBANK", "Stock 06  -  Kotak Mahindra Bank", group=grp_list)
+s07 = input.symbol("NSE:MUTHOOTFIN", "Stock 07  -  Muthoot Finance", group=grp_list)
+s08 = input.symbol("NSE:SBILIFE", "Stock 08  -  SBI Life Insurance", group=grp_list)
+s09 = input.symbol("NSE:COFORGE", "Stock 09  -  Coforge", group=grp_list)
+s10 = input.symbol("NSE:HCLTECH", "Stock 10  -  HCL Technologies", group=grp_list)
+s11 = input.symbol("NSE:INFY", "Stock 11  -  Infosys", group=grp_list)
+s12 = input.symbol("NSE:LTIM", "Stock 12  -  LTIMindtree", group=grp_list)
+s13 = input.symbol("NSE:LTTS", "Stock 13  -  L&T Technology Services", group=grp_list)
+s14 = input.symbol("NSE:MPHASIS", "Stock 14  -  Mphasis", group=grp_list)
+s15 = input.symbol("NSE:PERSISTENT", "Stock 15  -  Persistent Systems", group=grp_list)
+s16 = input.symbol("NSE:TATAELXSI", "Stock 16  -  Tata Elxsi", group=grp_list)
+s17 = input.symbol("NSE:TCS", "Stock 17  -  Tata Consultancy Services", group=grp_list)
+s18 = input.symbol("NSE:TECHM", "Stock 18  -  Tech Mahindra", group=grp_list)
+s19 = input.symbol("NSE:APOLLOHOSP", "Stock 19  -  Apollo Hospitals", group=grp_list)
+s20 = input.symbol("NSE:CIPLA", "Stock 20  -  Cipla", group=grp_list)
+s21 = input.symbol("NSE:DIVISLAB", "Stock 21  -  Divi's Laboratories", group=grp_list)
+s22 = input.symbol("NSE:DRREDDY", "Stock 22  -  Dr. Reddy's Laboratories", group=grp_list)
+s23 = input.symbol("NSE:LUPIN", "Stock 23  -  Lupin", group=grp_list)
+s24 = input.symbol("NSE:SUNPHARMA", "Stock 24  -  Sun Pharmaceutical", group=grp_list)
+s25 = input.symbol("NSE:BAJAJ-AUTO", "Stock 25  -  Bajaj Auto", group=grp_list)
+s26 = input.symbol("NSE:EICHERMOT", "Stock 26  -  Eicher Motors", group=grp_list)
+s27 = input.symbol("NSE:M_M", "Stock 27  -  Mahindra & Mahindra", group=grp_list)
+s28 = input.symbol("NSE:TVSMOTOR", "Stock 28  -  TVS Motor", group=grp_list)
+s29 = input.symbol("NSE:ASIANPAINT", "Stock 29  -  Asian Paints", group=grp_list)
+s30 = input.symbol("NSE:BRITANNIA", "Stock 30  -  Britannia Industries", group=grp_list)
+s31 = input.symbol("NSE:HINDUNILVR", "Stock 31  -  Hindustan Unilever", group=grp_list)
+s32 = input.symbol("NSE:NESTLEIND", "Stock 32  -  Nestle India", group=grp_list)
+s33 = input.symbol("NSE:TITAN", "Stock 33  -  Titan Company", group=grp_list)
+s34 = input.symbol("NSE:ADANIENT", "Stock 34  -  Adani Enterprises", group=grp_list)
+s35 = input.symbol("NSE:ADANIPORTS", "Stock 35  -  Adani Ports", group=grp_list)
+s36 = input.symbol("NSE:BHARTIARTL", "Stock 36  -  Bharti Airtel", group=grp_list)
+s37 = input.symbol("NSE:HAL", "Stock 37  -  Hindustan Aeronautics", group=grp_list)
+s38 = input.symbol("NSE:LT", "Stock 38  -  Larsen & Toubro", group=grp_list)
+s39 = input.symbol("NSE:RELIANCE", "Stock 39  -  Reliance Industries", group=grp_list)
+s40 = input.symbol("NSE:SIEMENS", "Stock 40  -  Siemens", group=grp_list)
+
+// ========================================================================= //
+// 2. EVALUATION ENGINE (v16.1 LOGIC + v16.2 PRICE GATE)
+// ========================================================================= //
+f_ironman_eval() =>
+    total_range = high - low
+    body        = math.abs(close - open)
+    wick_up     = high - math.max(close, open)
+    wick_down   = math.min(close, open) - low
+    body_ratio  = total_range > 0 ? (body / total_range) : 0.0
+
+    rsi = ta.rsi(close, 14)
+
+    mean_range   = ta.sma(total_range, 20)
+    stdev_range  = ta.stdev(total_range, 20)
+    z_range      = stdev_range > 0 ? (total_range - mean_range) / stdev_range : 0.0
+
+    is_tier3_climax  = z_range >= 3.5
+    is_tier2_power   = z_range >= 1.5 and not is_tier3_climax
+
+    net_change_20 = math.abs(close - close[20])
+    sum_ranges_20 = math.sum(total_range, 20)
+    er_20         = sum_ranges_20 > 0 ? (net_change_20 / sum_ranges_20) : 0.0
+    is_statistical_chop = er_20 < 0.25
+
+    ema20  = ta.ema(close, 20)
+    ema100 = ta.ema(close, 100)
+
+    stdev_price_100 = ta.stdev(close, 100)
+    z_dist          = stdev_price_100 > 0 ? (close - ema100) / stdev_price_100 : 0.0
+
+    is_extended_uptrend   = z_dist >= 2.0
+    is_extended_downtrend = z_dist <= -2.0
+
+    bar_energy = total_range * volume
+    re_ratio   = bar_energy[1] > 0 ? (bar_energy / bar_energy[1]) : 0.0
+
+    req_body_ratio  = is_tier2_power ? 0.60 : 0.80
+    close_near_high = close >= (high - total_range * 0.20)
+    close_near_low  = close <= (low + total_range * 0.20)
+
+    is_strong_bull = (close > open) and (body_ratio >= req_body_ratio or is_tier2_power) and close_near_high and not is_tier3_climax
+    is_strong_bear = (close < open) and (body_ratio >= req_body_ratio or is_tier2_power) and close_near_low  and not is_tier3_climax
+
+    is_open_eq_low  = (math.abs(open - low) <= (total_range * 0.04)) and (close > open) and not is_tier3_climax
+    is_open_eq_high = (math.abs(open - high) <= (total_range * 0.04)) and (close < open) and not is_tier3_climax
+
+    is_bear_rejection_drive = (wick_up >= total_range * 0.25) and close_near_low and (wick_down <= total_range * 0.10) and (close < open) and not is_tier3_climax
+    is_bull_rejection_drive = (wick_down >= total_range * 0.25) and close_near_high and (wick_up <= total_range * 0.10) and (close > open) and not is_tier3_climax
+
+    is_marubozu_bear = is_strong_bear and (wick_up <= total_range * 0.05) and (wick_down <= total_range * 0.05)
+    is_marubozu_bull = is_strong_bull and (wick_up <= total_range * 0.05) and (wick_down <= total_range * 0.05)
+    is_shooting_star = (wick_up >= body * 1.8) and (wick_down <= body * 0.3) and (close < open)
+    is_hammer        = (wick_down >= body * 1.8) and (wick_up <= body * 0.3) and (close > open)
+
+    vol_ma   = ta.sma(volume, 20)
+    high_vol = volume > vol_ma
+
+    ema_cross     = ta.cross(ema20, ema100)
+    crosses_in_40 = ta.cum(ema_cross ? 1 : 0) - ta.cum(ema_cross[40] ? 1 : 0)
+    is_entangled  = crosses_in_40 > 1
+
+    ema20_slope_up = ema20 > ema20[3]
+    ema20_slope_dn = ema20 < ema20[3]
+
+    strict_bull_trend = (close > ema100) and (ema20 > ema100) and ema20_slope_up and not is_entangled and not is_statistical_chop
+    strict_bear_trend = (close < ema100) and (ema20 < ema100) and ema20_slope_dn and not is_entangled and not is_statistical_chop
+
+    dist_low_ema20   = math.abs(low - ema20) / ema20 * 100
+    dist_low_ema100  = math.abs(low - ema100) / ema100 * 100
+    near_long_ema    = (low <= ema20 and high >= ema20) or (dist_low_ema20 <= 0.05) or (dist_low_ema100 <= 0.05)
+
+    dist_high_ema20  = math.abs(high - ema20) / ema20 * 100
+    dist_high_ema100 = math.abs(high - ema100) / ema100 * 100
+    near_short_ema   = (high >= ema20 and low <= ema20) or (dist_high_ema20 <= 0.05) or (dist_high_ema100 <= 0.05)
+
+    ema_rejection_bull = near_long_ema and (close > open)
+    ema_rejection_bear = near_short_ema and (close < open)
+
+    // Intraday Daily High/Low Tracker (Avoids Nested Security Calls)
+    var float daily_h = na
+    var float daily_l = na
+    var float cd_h = na
+    var float cd_l = na
+    if ta.change(time("D")) != 0
+        daily_h := cd_h
+        daily_l := cd_l
+        cd_h := high
+        cd_l := low
+    else
+        cd_h := math.max(nz(cd_h, high), high)
+        cd_l := math.min(nz(cd_l, low), low)
+
+    box_high       = ta.highest(high[1], 20)
+    box_low        = ta.lowest(low[1], 20)
+    box_height_pct = (box_high - box_low) / close * 100
+
+    is_valid_box      = box_height_pct <= 1.50
+    box_breakout_long = is_valid_box and (close > box_high) and (close > open) and (is_tier2_power or is_strong_bull or is_open_eq_low) and high_vol
+    box_breakout_short= is_valid_box and (close < box_low)  and (close < open) and (is_tier2_power or is_strong_bear or is_open_eq_high) and high_vol
+
+    ph = ta.pivothigh(high, 5, 5)
+    pl = ta.pivotlow(low, 5, 5)
+    var float neckline_res = na
+    var float neckline_sup = na
+    if not na(ph)
+        neckline_res := ph
+    if not na(pl)
+        neckline_sup := pl
+
+    pdl_swept_red   = (low[1] <= daily_l) and (close[1] < open[1])
+    has_power_bull  = (re_ratio >= 1.25 or z_range >= 1.0 or is_open_eq_low) and high_vol
+    nullify_bull_2a = is_extended_downtrend and pdl_swept_red and has_power_bull and (close > high[1]) and (close > open)
+
+    pdh_swept_green = (high[1] >= daily_h) and (close[1] > open[1])
+    has_power_bear  = (re_ratio >= 1.25 or z_range >= 1.0 or is_open_eq_high) and high_vol
+    nullify_bear_2a = is_extended_uptrend and pdh_swept_green and has_power_bear and (close < low[1]) and (close < open)
+
+    highest_high_2 = ta.highest(high[1], 2)
+    lowest_low_2   = ta.lowest(low[1], 2)
+
+    score_cont_long = 0
+    if box_breakout_long
+        score_cont_long := 5
+    else if strict_bull_trend and (near_long_ema or near_long_ema[1])
+        valid_bar = is_tier2_power or is_strong_bull or is_open_eq_low or is_marubozu_bull or is_hammer or ema_rejection_bull or is_bull_rejection_drive
+        if valid_bar
+            score_cont_long += 2
+            if high_vol
+                score_cont_long += 1
+            if close > highest_high_2
+                score_cont_long += 1
+            if body_ratio >= 0.65 or (low <= ema100 and high >= ema100)
+                score_cont_long += 1
+
+    score_cont_short = 0
+    if box_breakout_short
+        score_cont_short := 5
+    else if strict_bear_trend and (near_short_ema or near_short_ema[1])
+        valid_bar = is_tier2_power or is_strong_bear or is_open_eq_high or is_marubozu_bear or is_shooting_star or ema_rejection_bear or is_bear_rejection_drive
+        if valid_bar
+            score_cont_short += 2
+            if high_vol
+                score_cont_short += 1
+            if close < lowest_low_2
+                score_cont_short += 1
+            if body_ratio >= 0.65 or (high >= ema100 and low <= ema100)
+                score_cont_short += 1
+
+    score_rev_long  = nullify_bull_2a ? 5 : 0
+    score_rev_short = nullify_bear_2a ? 5 : 0
+
+    max_score = math.max(score_cont_short, score_cont_long, score_rev_short, score_rev_long)
+
+    active_name = "None"
+    if max_score == score_cont_short and score_cont_short >= 4
+        active_name := box_breakout_short ? "BOX BREAKDOWN" : "SHORT CONT"
+    else if max_score == score_cont_long and score_cont_long >= 4
+        active_name := box_breakout_long ? "BOX BREAKOUT" : "LONG CONT"
+    else if max_score == score_rev_short and score_rev_short >= 4
+        active_name := "SHORT 2A SWEEP"
+    else if max_score == score_rev_long and score_rev_long >= 4
+        active_name := "LONG 2A SWEEP"
+
+    trend_txt = is_statistical_chop or is_entangled ? "CHOP" : is_extended_uptrend ? "EXT BULL" : is_extended_downtrend ? "EXT BEAR" : strict_bull_trend ? "BULLISH" : strict_bear_trend ? "BEARISH" : "SIDEWAYS"
+
+    // ---- v16.2 ADDITION: price band gate ---------------------------------- //
+    // Evaluated in the CONTEXT of the requested symbol, so `close` here is the
+    // LTP of that F&O stock, not of the chart you dropped the indicator on.
+    in_band = (close >= min_price) and (close <= max_price)
+
+    [active_name, max_score, trend_txt, in_band, close]
+
+// ========================================================================= //
+// 3. MULTI-SYMBOL DATA FETCHING   (40 / 40 request.security slots)
+// ========================================================================= //
+get_data(sym) => request.security(sym, timeframe.period, f_ironman_eval())
+
+[act01, sc01, tr01, ir01, px01] = get_data(s01)
+[act02, sc02, tr02, ir02, px02] = get_data(s02)
+[act03, sc03, tr03, ir03, px03] = get_data(s03)
+[act04, sc04, tr04, ir04, px04] = get_data(s04)
+[act05, sc05, tr05, ir05, px05] = get_data(s05)
+[act06, sc06, tr06, ir06, px06] = get_data(s06)
+[act07, sc07, tr07, ir07, px07] = get_data(s07)
+[act08, sc08, tr08, ir08, px08] = get_data(s08)
+[act09, sc09, tr09, ir09, px09] = get_data(s09)
+[act10, sc10, tr10, ir10, px10] = get_data(s10)
+[act11, sc11, tr11, ir11, px11] = get_data(s11)
+[act12, sc12, tr12, ir12, px12] = get_data(s12)
+[act13, sc13, tr13, ir13, px13] = get_data(s13)
+[act14, sc14, tr14, ir14, px14] = get_data(s14)
+[act15, sc15, tr15, ir15, px15] = get_data(s15)
+[act16, sc16, tr16, ir16, px16] = get_data(s16)
+[act17, sc17, tr17, ir17, px17] = get_data(s17)
+[act18, sc18, tr18, ir18, px18] = get_data(s18)
+[act19, sc19, tr19, ir19, px19] = get_data(s19)
+[act20, sc20, tr20, ir20, px20] = get_data(s20)
+[act21, sc21, tr21, ir21, px21] = get_data(s21)
+[act22, sc22, tr22, ir22, px22] = get_data(s22)
+[act23, sc23, tr23, ir23, px23] = get_data(s23)
+[act24, sc24, tr24, ir24, px24] = get_data(s24)
+[act25, sc25, tr25, ir25, px25] = get_data(s25)
+[act26, sc26, tr26, ir26, px26] = get_data(s26)
+[act27, sc27, tr27, ir27, px27] = get_data(s27)
+[act28, sc28, tr28, ir28, px28] = get_data(s28)
+[act29, sc29, tr29, ir29, px29] = get_data(s29)
+[act30, sc30, tr30, ir30, px30] = get_data(s30)
+[act31, sc31, tr31, ir31, px31] = get_data(s31)
+[act32, sc32, tr32, ir32, px32] = get_data(s32)
+[act33, sc33, tr33, ir33, px33] = get_data(s33)
+[act34, sc34, tr34, ir34, px34] = get_data(s34)
+[act35, sc35, tr35, ir35, px35] = get_data(s35)
+[act36, sc36, tr36, ir36, px36] = get_data(s36)
+[act37, sc37, tr37, ir37, px37] = get_data(s37)
+[act38, sc38, tr38, ir38, px38] = get_data(s38)
+[act39, sc39, tr39, ir39, px39] = get_data(s39)
+[act40, sc40, tr40, ir40, px40] = get_data(s40)
+
+// Alert only fires for names that are BOTH scoring >= 4 AND inside the band.
+bool any_signal_triggered = (sc01 >= 4 and ir01) or (sc02 >= 4 and ir02) or (sc03 >= 4 and ir03) or (sc04 >= 4 and ir04) or
+     (sc05 >= 4 and ir05) or (sc06 >= 4 and ir06) or (sc07 >= 4 and ir07) or (sc08 >= 4 and ir08) or
+     (sc09 >= 4 and ir09) or (sc10 >= 4 and ir10) or (sc11 >= 4 and ir11) or (sc12 >= 4 and ir12) or
+     (sc13 >= 4 and ir13) or (sc14 >= 4 and ir14) or (sc15 >= 4 and ir15) or (sc16 >= 4 and ir16) or
+     (sc17 >= 4 and ir17) or (sc18 >= 4 and ir18) or (sc19 >= 4 and ir19) or (sc20 >= 4 and ir20) or
+     (sc21 >= 4 and ir21) or (sc22 >= 4 and ir22) or (sc23 >= 4 and ir23) or (sc24 >= 4 and ir24) or
+     (sc25 >= 4 and ir25) or (sc26 >= 4 and ir26) or (sc27 >= 4 and ir27) or (sc28 >= 4 and ir28) or
+     (sc29 >= 4 and ir29) or (sc30 >= 4 and ir30) or (sc31 >= 4 and ir31) or (sc32 >= 4 and ir32) or
+     (sc33 >= 4 and ir33) or (sc34 >= 4 and ir34) or (sc35 >= 4 and ir35) or (sc36 >= 4 and ir36) or
+     (sc37 >= 4 and ir37) or (sc38 >= 4 and ir38) or (sc39 >= 4 and ir39) or (sc40 >= 4 and ir40)
+
+alertcondition(any_signal_triggered, title="IronMan Watchlist Alert (₹1k-10k)", message="IronMan Signal Triggered on Watchlist!")
+
+// ========================================================================= //
+// 4. PRICE BAND FILTER -> SORT -> RENDER
+// ========================================================================= //
+txt_size = table_size == "Small" ? size.small : table_size == "Large" ? size.large : size.normal
+
+var table tbl = na
+var int prev_rows = -1
+
+if barstate.islast
+    // ---- Load Arrays (chunked: array.from() has a max arity in Pine) ------ //
+    syms = array.from(s01, s02, s03, s04, s05, s06, s07, s08, s09, s10)
+    syms := array.concat(syms, array.from(s11, s12, s13, s14, s15, s16, s17, s18, s19, s20))
+    syms := array.concat(syms, array.from(s21, s22, s23, s24, s25, s26, s27, s28, s29, s30))
+    syms := array.concat(syms, array.from(s31, s32, s33, s34, s35, s36, s37, s38, s39, s40))
+    scrs = array.from(sc01, sc02, sc03, sc04, sc05, sc06, sc07, sc08, sc09, sc10)
+    scrs := array.concat(scrs, array.from(sc11, sc12, sc13, sc14, sc15, sc16, sc17, sc18, sc19, sc20))
+    scrs := array.concat(scrs, array.from(sc21, sc22, sc23, sc24, sc25, sc26, sc27, sc28, sc29, sc30))
+    scrs := array.concat(scrs, array.from(sc31, sc32, sc33, sc34, sc35, sc36, sc37, sc38, sc39, sc40))
+    acts = array.from(act01, act02, act03, act04, act05, act06, act07, act08, act09, act10)
+    acts := array.concat(acts, array.from(act11, act12, act13, act14, act15, act16, act17, act18, act19, act20))
+    acts := array.concat(acts, array.from(act21, act22, act23, act24, act25, act26, act27, act28, act29, act30))
+    acts := array.concat(acts, array.from(act31, act32, act33, act34, act35, act36, act37, act38, act39, act40))
+    trns = array.from(tr01, tr02, tr03, tr04, tr05, tr06, tr07, tr08, tr09, tr10)
+    trns := array.concat(trns, array.from(tr11, tr12, tr13, tr14, tr15, tr16, tr17, tr18, tr19, tr20))
+    trns := array.concat(trns, array.from(tr21, tr22, tr23, tr24, tr25, tr26, tr27, tr28, tr29, tr30))
+    trns := array.concat(trns, array.from(tr31, tr32, tr33, tr34, tr35, tr36, tr37, tr38, tr39, tr40))
+    prcs = array.from(px01, px02, px03, px04, px05, px06, px07, px08, px09, px10)
+    prcs := array.concat(prcs, array.from(px11, px12, px13, px14, px15, px16, px17, px18, px19, px20))
+    prcs := array.concat(prcs, array.from(px21, px22, px23, px24, px25, px26, px27, px28, px29, px30))
+    prcs := array.concat(prcs, array.from(px31, px32, px33, px34, px35, px36, px37, px38, px39, px40))
+    inrg = array.from(ir01, ir02, ir03, ir04, ir05, ir06, ir07, ir08, ir09, ir10)
+    inrg := array.concat(inrg, array.from(ir11, ir12, ir13, ir14, ir15, ir16, ir17, ir18, ir19, ir20))
+    inrg := array.concat(inrg, array.from(ir21, ir22, ir23, ir24, ir25, ir26, ir27, ir28, ir29, ir30))
+    inrg := array.concat(inrg, array.from(ir31, ir32, ir33, ir34, ir35, ir36, ir37, ir38, ir39, ir40))
+
+    // ---- Price band filter ------------------------------------------------ //
+    hide_oor  = oor_mode == "Hide out-of-range rows"
+    blank_oor = oor_mode == "Blank row (no signal)"
+
+    k_syms = array.new_string()
+    k_prcs = array.new_float()
+    k_scrs = array.new_int()
+    k_acts = array.new_string()
+    k_trns = array.new_string()
+    k_inrg = array.new_bool()
+    hits   = 0
+
+    for i = 0 to 40 - 1
+        _ir   = array.get(inrg, i)
+        _scr  = array.get(scrs, i)
+        _keep = (not hide_oor) or _ir
+        if _keep
+            array.push(k_syms, array.get(syms, i))
+            array.push(k_prcs, array.get(prcs, i))
+            array.push(k_scrs, (blank_oor and not _ir) ? 0 : _scr)
+            array.push(k_acts, array.get(acts, i))
+            array.push(k_trns, array.get(trns, i))
+            array.push(k_inrg, _ir)
+        if _ir and _scr >= 4
+            hits += 1
+
+    // ---- Sort by score (descending) - live signals float to the top ------- //
+    indices = array.sort_indices(k_scrs, order.descending)
+    visible = array.size(indices)
+    rows    = visible + 2
+
+    // ---- (Re)build the table only when the row count changes -------------- //
+    if na(tbl) or rows != prev_rows
+        if not na(tbl)
+            table.delete(tbl)
+        tbl := table.new(table_pos, 5, rows, bgcolor=color.new(#111111, 10), border_width=1, border_color=color.gray)
+        prev_rows := rows
+
+    band_txt = "₹" + str.tostring(min_price, "#") + " - ₹" + str.tostring(max_price, "#")
+
+    // ---- Title row -------------------------------------------------------- //
+    table.cell(tbl, 0, 0, "IRONMAN v16.2",     text_color=color.white, bgcolor=color.new(#0a2a5e, 0), text_size=txt_size)
+    table.cell(tbl, 1, 0, band_txt,            text_color=color.white, bgcolor=color.new(#0a2a5e, 0), text_size=txt_size)
+    table.cell(tbl, 2, 0, "SIG " + str.tostring(hits), text_color=color.white, bgcolor=color.new(#0a2a5e, 0), text_size=txt_size)
+    table.cell(tbl, 3, 0, str.tostring(visible) + "/" + str.tostring(40), text_color=color.white, bgcolor=color.new(#0a2a5e, 0), text_size=txt_size)
+    table.cell(tbl, 4, 0, "NSE F&O",           text_color=color.white, bgcolor=color.new(#0a2a5e, 0), text_size=txt_size)
+
+    // ---- Header row ------------------------------------------------------- //
+    table.cell(tbl, 0, 1, "Symbol", text_color=color.white, bgcolor=color.new(#1f3a93, 0), text_size=txt_size)
+    table.cell(tbl, 1, 1, "LTP ₹",  text_color=color.white, bgcolor=color.new(#1f3a93, 0), text_size=txt_size)
+    table.cell(tbl, 2, 1, "Setup",  text_color=color.white, bgcolor=color.new(#1f3a93, 0), text_size=txt_size)
+    table.cell(tbl, 3, 1, "Rating", text_color=color.white, bgcolor=color.new(#1f3a93, 0), text_size=txt_size)
+    table.cell(tbl, 4, 1, "Context",text_color=color.white, bgcolor=color.new(#1f3a93, 0), text_size=txt_size)
+
+    // ---- Data rows -------------------------------------------------------- //
+    for i = 0 to visible - 1
+        idx   = array.get(indices, i)
+        c_sym = str.replace(array.get(k_syms, idx), "NSE:", "")
+        c_prc = array.get(k_prcs, idx)
+        c_scr = array.get(k_scrs, idx)
+        c_act = array.get(k_acts, idx)
+        c_trn = array.get(k_trns, idx)
+        c_ir  = array.get(k_inrg, idx)
+
+        is_act    = c_scr >= 4
+        oor       = not c_ir
+        is_short  = str.contains(c_act, "SHORT") or str.contains(c_act, "BREAKDOWN")
+
+        sym_bg  = oor ? color.new(color.gray, 70) : color.black
+        sym_fg  = oor ? color.new(color.white, 45) : color.white
+        px_bg   = oor ? color.new(color.orange, 60) : color.new(color.gray, 60)
+        setup_t = (blank_oor and oor) ? "OUT OF RANGE" : c_act
+        setup_bg= oor ? color.new(color.gray, 70) : (is_act ? (is_short ? color.red : color.green) : color.new(color.gray, 50))
+        score_t = (blank_oor and oor) ? "-" : str.tostring(c_scr) + "/5"
+        score_bg= oor ? color.new(color.gray, 70) : (is_act ? (is_short ? color.new(color.red, 25) : color.new(color.green, 25)) : color.new(color.gray, 50))
+        ctx_t   = oor ? "OUT OF BAND" : c_trn
+        ctx_bg  = oor ? color.new(color.orange, 50) : (c_trn == "CHOP" ? color.orange : (str.contains(c_trn, "BULL") ? color.green : str.contains(c_trn, "BEAR") ? color.red : color.gray))
+
+        table.cell(tbl, 0, i + 2, c_sym,            text_color=sym_fg,        bgcolor=sym_bg,   text_size=txt_size)
+        table.cell(tbl, 1, i + 2, show_price ? str.tostring(c_prc, "#.##") : "-", text_color=color.white, bgcolor=px_bg, text_size=txt_size)
+        table.cell(tbl, 2, i + 2, setup_t,          text_color=color.white,   bgcolor=setup_bg, text_size=txt_size)
+        table.cell(tbl, 3, i + 2, score_t,          text_color=color.white,   bgcolor=score_bg, text_size=txt_size)
+        table.cell(tbl, 4, i + 2, ctx_t,            text_color=color.white,   bgcolor=ctx_bg,   text_size=txt_size)
