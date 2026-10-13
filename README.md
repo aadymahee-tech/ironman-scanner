@@ -182,6 +182,17 @@ a header with the scan settings, stat cards, a signals table, and the full
 universe as a sortable, filterable table (text search, signals only, in-band
 only, sector). Styling matches the indicator's table.
 
+**Live URL (one-time setup).** A committed `.html` renders as source text on
+GitHub, so the workflow also publishes the dashboard as a GitHub Pages site.
+Switch it on once:
+
+> **Settings → Pages → Source: GitHub Actions**
+
+After that, every scan republishes the dashboard at
+`https://aadymahee-tech.github.io/ironman-scanner/`. Until it is switched on,
+the scan still runs normally — the publish step only emits a warning, so a
+missing setting never fails a scan.
+
 Keeping the universe current — NSE adds, drops and renames F&O names quarterly:
 
 ```bash

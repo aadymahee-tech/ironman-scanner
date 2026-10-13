@@ -191,6 +191,21 @@ PY
 Sector labels are a convenience grouping for the interface, not an official NSE
 classification. Prices in the page come from whatever feed the scan used.
 
+### Publishing it as a live URL
+
+GitHub serves a committed `.html` file as source text, so the scheduled workflow
+also publishes the dashboard to GitHub Pages. Enable it once under
+**Settings → Pages → Source: GitHub Actions**; after that the dashboard is live at
+
+```
+https://aadymahee-tech.github.io/ironman-scanner/
+```
+
+and is republished on every scan. The publish step checks whether Pages is
+enabled before doing anything: if it is not, the scan run stays green and emits a
+warning telling you to switch it on, so a missing setting can never be mistaken
+for a broken scan.
+
 ## The data source
 
 Live bars come from the public Yahoo Finance chart endpoint
