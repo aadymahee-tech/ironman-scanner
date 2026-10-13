@@ -64,10 +64,18 @@ jobs:
             echo "symbols returning bars: ${bars}   symbols failing: ${failures}"
           } >> "$GITHUB_STEP_SUMMARY"
 
+          # One compact line of real engine output, parsed from the markdown the
+          # scanner just produced: symbol, rating and regime. This is what makes
+          # the check worth reading — it proves live bars flow through the whole
+          # engine, not just that HTTP worked.
+          engine_out=$(grep -E '^\| .*NSE:' /tmp/probe.log \
+            | awk -F'|' '{gsub(/[* ]/,"",$2); gsub(/ /,"",$5); gsub(/ /,"",$6); gsub(/ /,"",$7); printf "%s=%s %s %s  ", $2, $5, $6, $7}' \
+            | head -c 400 || true)
+
           # A single annotation line, so the outcome is visible in the checks UI
           # (and to automation) without opening the log.
           if [ "$code" -eq 0 ] && [ "${bars:-0}" -gt 0 ]; then
-            echo "::notice title=Live feed check::${scanned}; ${bars} symbol(s) returned bars from the live provider."
+            echo "::notice title=Live feed check::${scanned}; ${bars} symbol(s) returned bars from the live provider. ${engine_out}"
           else
             echo "::warning title=Live feed check::exit ${code}, ${bars} symbol(s) returned bars, ${failures} failed. Not blocking: the endpoint is unofficial and rate-limited. If this persists, its response shape may have changed."
           fi
