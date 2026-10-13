@@ -1,0 +1,83 @@
+name: IronMan F&O Scan
+
+# ---------------------------------------------------------------------------
+#  Scheduled intraday + closing scans of the full NSE F&O universe
+#  (price band 1,000-10,000 by default). Results are committed back to
+#  results/ and printed to the Actions step summary.
+#
+#  Crontab is UTC. IST = UTC + 5:30, so:
+#    */15 3-9 * * 1-5  ->  every 15 min from 08:45 to 15:45 IST (Mon-Fri)
+#    5 10 * * 1-5      ->  15:35 IST closing scan (Mon-Fri)
+#  GitHub schedules can drift by a few minutes at peak times; that is normal.
+#
+#  Customise without editing this file: create repository variables
+#  (Settings -> Secrets and variables -> Actions -> Variables):
+#    SCAN_INTERVAL  (1m|5m|15m|30m|1h|1d)   default 15m
+#    SCAN_LOOKBACK  (int)                   default 2
+#    SCAN_BAND_LOW  (int)                   default 1000
+#    SCAN_BAND_HIGH (int)                   default 10000
+# ---------------------------------------------------------------------------
+
+on:
+  schedule:
+    - cron: "*/15 3-9 * * 1-5"
+    - cron: "5 10 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      interval:
+        description: "Candle size"
+        default: "15m"
+      lookback:
+        description: "Confirmed candles in trigger window"
+        default: "2"
+
+permissions:
+  contents: write          # needed to commit results/ back to the repo
+
+concurrency:
+  group: ironman-scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    env:
+      SCAN_INTERVAL:  ${{ github.event.inputs.interval || vars.SCAN_INTERVAL || '15m' }}
+      SCAN_LOOKBACK:  ${{ github.event.inputs.lookback || vars.SCAN_LOOKBACK || '2' }}
+      SCAN_BAND_LOW:  ${{ vars.SCAN_BAND_LOW || '1000' }}
+      SCAN_BAND_HIGH: ${{ vars.SCAN_BAND_HIGH || '10000' }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run scanner
+        run: |
+          DAY=$(date -u +%F)
+          mkdir -p results/history
+          python ironman_scanner.py \
+            --interval "$SCAN_INTERVAL" \
+            --lookback "$SCAN_LOOKBACK" \
+            --low  "$SCAN_BAND_LOW" \
+            --high "$SCAN_BAND_HIGH" \
+            --workers 6 \
+            --csv "results/history/${DAY}.csv" \
+            --md  results/latest.md
+          cat results/latest.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit results
+        run: |
+          git config user.name  "ironman-bot"
+          git config user.email "ironman-bot@users.noreply.github.com"
+          git add results
+          if git diff --cached --quiet; then
+            echo "No result changes to commit."
+          else
+            git commit -m "scan $(date -u '+%Y-%m-%d %H:%M UTC') [$SCAN_INTERVAL / lb$SCAN_LOOKBACK]"
+            git push
+          fi
