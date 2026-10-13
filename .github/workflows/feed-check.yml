@@ -1,0 +1,69 @@
+name: Live feed check
+
+# The scan itself (main.yml) is scheduled, so a broken live feed would only be
+# noticed on the next tick — and if the feed breaks, nothing gets committed and
+# the failure mode is a silent gap in results/. This checks a handful of symbols
+# against the live provider on every PR and on demand.
+#
+# It is deliberately REPORT-ONLY: the provider is an unofficial, rate-limited
+# endpoint, and a flaky third-party host must never block a merge. Treat the
+# output as a signal, not a gate. The hard guard lives in main.yml, which exits
+# non-zero when every fetch fails.
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  feed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Probe the live provider (informational)
+        run: |
+          cat > /tmp/probe.csv <<'CSV'
+          symbol,name,sector,approx_price,enabled
+          NSE:INFY,Infosys,IT,1500,1
+          NSE:HDFCBANK,HDFC Bank,Banking & Finance,1000,1
+          NSE:HAL,Hindustan Aeronautics,Diversified & Infra,4200,1
+          CSV
+
+          {
+            echo "### Live feed check"
+            echo
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          set +e
+          python ironman_scanner.py \
+            --source yahoo --watchlist /tmp/probe.csv \
+            --interval 15m --lookback 1 \
+            --low 0 --high 1000000 \
+            --workers 3 --md - --quiet 2>&1 | tee /tmp/probe.log
+          code=${PIPESTATUS[0]}
+          set -e
+
+          {
+            echo '```'
+            echo
+            if [ "$code" -eq 0 ]; then
+              echo "Live provider reachable - scanner exit 0."
+            else
+              echo "::warning::Live provider check failed (exit $code). Not blocking: the"
+              echo "endpoint is unofficial and rate-limited. If this stays red, the"
+              echo "provider's response shape may have changed."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          # Report-only by design: never fail the build from a third-party host.
+          exit 0
