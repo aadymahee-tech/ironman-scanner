@@ -1,0 +1,77 @@
+{
+  "deployments": {
+    "page": 1,
+    "last_page": 1,
+    "total": 4,
+    "deployments": [
+      {
+        "deployment_id": 1001,
+        "name": "Nifty Weekly Straddle",
+        "deployment_type": "LIVE AUTO",
+        "status": "Live-Entered",
+        "broker": "Zerodha",
+        "multiplier": 2,
+        "capital": 300000,
+        "pnl": 4250.5,
+        "open_positions": 4,
+        "total_positions": 4,
+        "currency_code": "INR",
+        "deployed_on": "2026-09-01"
+      },
+      {
+        "deployment_id": 1002,
+        "name": "BankNifty Iron Condor",
+        "deployment_type": "LIVE AUTO",
+        "status": "Active",
+        "broker": "Zerodha",
+        "multiplier": 1,
+        "capital": 200000,
+        "pnl": -1200,
+        "open_positions": 0,
+        "total_positions": 0,
+        "currency_code": "INR",
+        "deployed_on": "2026-10-01"
+      },
+      {
+        "deployment_id": 1003,
+        "name": "Crude Momentum",
+        "deployment_type": "LIVE AUTO",
+        "status": "Error-Execution",
+        "broker": "Angel One",
+        "multiplier": 1,
+        "capital": 100000,
+        "pnl": 0,
+        "open_positions": 0,
+        "total_positions": 0,
+        "currency_code": "INR",
+        "deployed_on": "2026-10-10"
+      },
+      {
+        "deployment_id": 1004,
+        "name": "Paper Test Strangle",
+        "deployment_type": "LIVE OFFLINE",
+        "status": "Live-Entered",
+        "broker": "Paper",
+        "multiplier": 1,
+        "capital": 100000,
+        "pnl": 990,
+        "open_positions": 2,
+        "total_positions": 2,
+        "currency_code": "INR",
+        "deployed_on": "2026-10-15"
+      }
+    ]
+  },
+  "positions": {
+    "1001": {
+      "deployment_id": 1001,
+      "as_of": "2026-10-16T06:30:00+00:00",
+      "positions_hidden": false,
+      "positions": [
+        {"instrument_symbol": "NIFTY26O2125800CE", "net_quantity": -150, "pnl": 2100.25, "side": "SELL"},
+        {"instrument_symbol": "NIFTY26O2125800PE", "net_quantity": -150, "pnl": 2150.25, "side": "SELL"}
+      ]
+    }
+  },
+  "notifications": []
+}

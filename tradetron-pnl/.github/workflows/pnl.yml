@@ -1,0 +1,152 @@
+name: Tradetron P&L
+
+# --------------------------------------------------------------------------- #
+#  Hourly P&L snapshots during NSE market hours, an end-of-day summary, and
+#  weekly / monthly / quarterly digests — all pushed to Telegram and committed
+#  back to data/ and reports/.
+#
+#  Crontab is UTC. IST = UTC + 5:30, so:
+#    30 3-9 * * 1-5  ->  09:00, 10:00 … 15:00 IST  (09:00 is the pre-open
+#                        baseline snapshot; it sends nothing by default)
+#    10 10 * * 1-5   ->  15:40 IST end-of-day run
+#
+#  The program itself decides what to send from the IST clock (``--kind auto``)
+#  and stays silent on weekends and NSE holidays (config/holidays_nse.csv), so
+#  the schedule can be generous. GitHub schedules can drift by a few minutes at
+#  peak times; that is normal.
+#
+#  Secrets (Settings -> Secrets and variables -> Actions -> Secrets):
+#    TRADETRON_API_KEY    read-only key from Tradetron -> Developer API
+#    TELEGRAM_BOT_TOKEN   from @BotFather
+#    TELEGRAM_CHAT_ID     your user / group / channel id
+#
+#  Variables (same page -> Variables), all optional:
+#    TTPNL_PNL_SEMANTICS   cumulative | today   (default cumulative; see docs/API.md)
+#    TTPNL_FETCH_POSITIONS 1 | 0                (default 1)
+#    TTPNL_MAX_POSITIONS   int                  (default 25)
+#    TTPNL_PREOPEN_MESSAGE 1 | 0                (default 0)
+#    TTPNL_SILENT_HOURLY   1 | 0                (default 0; hourly pings without a sound)
+#    TTPNL_DEFAULT_SEGMENT fno | currency | commodity | intraday_equity | delivery_equity | crypto | other
+#    TTPNL_CURRENCY        INR                  (reporting currency)
+#    TTPNL_TAX_RATE        e.g. 0.30            (indicative advance-tax figure; off when unset)
+# --------------------------------------------------------------------------- #
+
+on:
+  schedule:
+    - cron: "30 3-9 * * 1-5"
+    - cron: "10 10 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      kind:
+        description: "Update kind"
+        type: choice
+        default: auto
+        options: [auto, preopen, hourly, eod, silent]
+      dry_run:
+        description: "Print the Telegram messages instead of sending them"
+        type: boolean
+        default: false
+      force:
+        description: "Run even on a weekend or holiday"
+        type: boolean
+        default: false
+      source:
+        description: "api = your Tradetron account · fixture = bundled sample data (no secrets needed; writes to a temp dir, forces an EOD dry run)"
+        type: choice
+        default: api
+        options: [api, fixture]
+
+permissions:
+  contents: write          # commit data/ and reports/ back to the repo
+
+concurrency:
+  group: tradetron-pnl
+  cancel-in-progress: false
+
+jobs:
+  pnl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      TRADETRON_API_KEY:     ${{ secrets.TRADETRON_API_KEY }}
+      TELEGRAM_BOT_TOKEN:    ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID:      ${{ secrets.TELEGRAM_CHAT_ID }}
+      TTPNL_PNL_SEMANTICS:   ${{ vars.TTPNL_PNL_SEMANTICS || 'cumulative' }}
+      TTPNL_FETCH_POSITIONS: ${{ vars.TTPNL_FETCH_POSITIONS || '1' }}
+      TTPNL_MAX_POSITIONS:   ${{ vars.TTPNL_MAX_POSITIONS || '25' }}
+      TTPNL_PREOPEN_MESSAGE: ${{ vars.TTPNL_PREOPEN_MESSAGE || '0' }}
+      TTPNL_SILENT_HOURLY:   ${{ vars.TTPNL_SILENT_HOURLY || '0' }}
+      TTPNL_DEFAULT_SEGMENT: ${{ vars.TTPNL_DEFAULT_SEGMENT || 'fno' }}
+      TTPNL_CURRENCY:        ${{ vars.TTPNL_CURRENCY || 'INR' }}
+      RUN_KIND:              ${{ github.event.inputs.kind || 'auto' }}
+      DRY_RUN:               ${{ github.event.inputs.dry_run || 'false' }}
+      FORCE:                 ${{ github.event.inputs.force || 'false' }}
+      SOURCE:                ${{ github.event.inputs.source || 'api' }}
+      REPORTS_DIR:           reports
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch, store, notify
+        id: run
+        run: |
+          FLAGS="--kind $RUN_KIND"
+          [ "$DRY_RUN" = "true" ] && FLAGS="$FLAGS --dry-run"
+          [ "$FORCE" = "true" ]   && FLAGS="$FLAGS --force"
+          if [ "$SOURCE" = "fixture" ]; then
+            # Sample-data run: never touches data/ or reports/, never needs secrets.
+            REPORTS_DIR=/tmp/fixture-run/reports
+            echo "REPORTS_DIR=$REPORTS_DIR" >> "$GITHUB_ENV"
+            FLAGS="$FLAGS --source fixture --fixture tests/fixtures/deployments_eod.json --force --dry-run"
+            FLAGS="$FLAGS --data-dir /tmp/fixture-run/data --reports-dir $REPORTS_DIR"
+            [ "$RUN_KIND" = "auto" ] && FLAGS="$FLAGS --kind eod"
+            # a 09:00 baseline first, so the EOD run has a day P&L to show
+            python ttpnl.py run --source fixture --fixture tests/fixtures/deployments.json --force --dry-run \
+              --kind preopen --quiet --no-reports --data-dir /tmp/fixture-run/data --reports-dir $REPORTS_DIR
+          fi
+          set +e
+          python ttpnl.py run $FLAGS --verbose
+          code=$?
+          set -e
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          if [ -f "$REPORTS_DIR/latest.md" ]; then
+            cat "$REPORTS_DIR/latest.md" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          # 0 = ok, 1 = Tradetron fetch failed, 3 = Telegram delivery failed.
+          # Data is committed in either case (see below); the step still goes red
+          # so the failure is visible in the Actions tab and by e-mail.
+          exit $code
+
+      - name: Indicative tax figure (optional)
+        if: always() && vars.TTPNL_TAX_RATE != '' && env.SOURCE == 'api'
+        continue-on-error: true
+        run: python ttpnl.py tax --rate "${{ vars.TTPNL_TAX_RATE }}"
+
+      - name: Commit data and reports
+        if: always()
+        run: |
+          git config user.name  "tradetron-pnl-bot"
+          git config user.email "tradetron-pnl-bot@users.noreply.github.com"
+          git add data reports
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+            exit 0
+          fi
+          git commit -m "pnl $(TZ=Asia/Kolkata date '+%Y-%m-%d %H:%M IST') [$RUN_KIND]"
+          # another run may have pushed in the meantime; rebase and retry once
+          git push || (git pull --rebase && git push)
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tradetron-pnl-reports
+          path: ${{ env.REPORTS_DIR }}/
+          if-no-files-found: ignore
+          retention-days: 30
