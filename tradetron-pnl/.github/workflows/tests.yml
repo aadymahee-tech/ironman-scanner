@@ -1,0 +1,69 @@
+name: Tests
+
+# Offline only: the suite drives everything through fixtures and fake
+# transports, so a CI run never touches Tradetron or Telegram.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Run the test suite
+        run: python -m unittest discover -s tests -t . -v
+
+      - name: Offline end-to-end smoke test (fixture, dry run)
+        run: |
+          set -o pipefail
+          mkdir -p /tmp/smoke
+          python ttpnl.py run --source fixture --fixture tests/fixtures/deployments.json \
+            --now 2026-10-16T09:00 --data-dir /tmp/smoke/data --reports-dir /tmp/smoke/reports \
+            --dry-run --quiet
+          python ttpnl.py run --source fixture --fixture tests/fixtures/deployments.json \
+            --now 2026-10-16T15:40 --data-dir /tmp/smoke/data --reports-dir /tmp/smoke/reports \
+            --dry-run --verbose | tee /tmp/smoke/run.log
+          grep -q "telegram \[eod\]" /tmp/smoke/run.log
+          grep -q "telegram \[weekly\]" /tmp/smoke/run.log          # 16 Oct 2026 is a Friday
+          test -s /tmp/smoke/data/ledger.csv
+          test -s /tmp/smoke/reports/dashboard.html
+          test -s /tmp/smoke/reports/tax/FY2026-27.md
+          if grep -qE '(src|href)="https?://' /tmp/smoke/reports/dashboard.html; then
+            echo "::error::dashboard must be self-contained (no external references)"
+            exit 1
+          fi
+          python ttpnl.py report --now 2026-10-16T16:00 --data-dir /tmp/smoke/data --reports-dir /tmp/smoke/reports
+          python ttpnl.py tax --fy FY2026-27 --data-dir /tmp/smoke/data --reports-dir /tmp/smoke/reports --stdout | head -5
+
+      - name: Validate the committed config files
+        run: |
+          python - <<'EOF'
+          from pathlib import Path
+          from tradetron_pnl.trading_calendar import load_holidays, holiday_coverage
+          from tradetron_pnl.config import load_deployment_tags
+          holidays = load_holidays(Path("config/holidays_nse.csv"))
+          assert holidays, "holiday file is empty"
+          load_deployment_tags(Path("config/deployments.csv"))
+          import datetime
+          year = datetime.date.today().year
+          if not holiday_coverage(holidays, year):
+              print(f"::warning title=Holidays::config/holidays_nse.csv has no entries for {year}")
+          print(f"{len(holidays)} holidays, deployment tags OK")
+          EOF

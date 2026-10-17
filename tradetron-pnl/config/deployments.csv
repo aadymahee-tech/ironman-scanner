@@ -1,0 +1,10 @@
+# One row per Tradetron deployment id you want to tag. Ids you do not list get
+# segment = TTPNL_DEFAULT_SEGMENT (fno) and include = 1. Paper / Live-Offline
+# deployments are excluded from the totals automatically, whatever you put here.
+#
+#   deployment_id  the id from data/deployments_seen.csv (filled in after the first run)
+#   alias          short name for Telegram (optional)
+#   segment        fno | currency | commodity | intraday_equity | delivery_equity | crypto | other
+#   include        1 to count towards totals and tax, 0 to track but exclude
+#   notes          anything for you / your CA
+deployment_id,alias,segment,include,notes

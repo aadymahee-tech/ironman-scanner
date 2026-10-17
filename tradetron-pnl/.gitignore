@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+.venv/
+# secrets live in the environment, never in the repo (.env.example is the template)
+.env
+.env.local
+.env.*.local
+# captured real payloads from `probe --save-fixture` unless you decide to commit them
+tests/fixtures/mine*.json
+tests/fixtures/captured*.json
