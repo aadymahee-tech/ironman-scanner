@@ -50,6 +50,11 @@ on:
         description: "Run even on a weekend or holiday"
         type: boolean
         default: false
+      source:
+        description: "api = your Tradetron account · fixture = bundled sample data (no secrets needed; writes to a temp dir, forces an EOD dry run)"
+        type: choice
+        default: api
+        options: [api, fixture]
 
 permissions:
   contents: write          # commit data/ and reports/ back to the repo
@@ -76,6 +81,8 @@ jobs:
       RUN_KIND:              ${{ github.event.inputs.kind || 'auto' }}
       DRY_RUN:               ${{ github.event.inputs.dry_run || 'false' }}
       FORCE:                 ${{ github.event.inputs.force || 'false' }}
+      SOURCE:                ${{ github.event.inputs.source || 'api' }}
+      REPORTS_DIR:           reports
 
     steps:
       - name: Check out repository
@@ -92,13 +99,24 @@ jobs:
           FLAGS="--kind $RUN_KIND"
           [ "$DRY_RUN" = "true" ] && FLAGS="$FLAGS --dry-run"
           [ "$FORCE" = "true" ]   && FLAGS="$FLAGS --force"
+          if [ "$SOURCE" = "fixture" ]; then
+            # Sample-data run: never touches data/ or reports/, never needs secrets.
+            REPORTS_DIR=/tmp/fixture-run/reports
+            echo "REPORTS_DIR=$REPORTS_DIR" >> "$GITHUB_ENV"
+            FLAGS="$FLAGS --source fixture --fixture tests/fixtures/deployments_eod.json --force --dry-run"
+            FLAGS="$FLAGS --data-dir /tmp/fixture-run/data --reports-dir $REPORTS_DIR"
+            [ "$RUN_KIND" = "auto" ] && FLAGS="$FLAGS --kind eod"
+            # a 09:00 baseline first, so the EOD run has a day P&L to show
+            python ttpnl.py run --source fixture --fixture tests/fixtures/deployments.json --force --dry-run \
+              --kind preopen --quiet --no-reports --data-dir /tmp/fixture-run/data --reports-dir $REPORTS_DIR
+          fi
           set +e
-          python ttpnl.py run $FLAGS
+          python ttpnl.py run $FLAGS --verbose
           code=$?
           set -e
           echo "exit_code=$code" >> "$GITHUB_OUTPUT"
-          if [ -f reports/latest.md ]; then
-            cat reports/latest.md >> "$GITHUB_STEP_SUMMARY"
+          if [ -f "$REPORTS_DIR/latest.md" ]; then
+            cat "$REPORTS_DIR/latest.md" >> "$GITHUB_STEP_SUMMARY"
           fi
           # 0 = ok, 1 = Tradetron fetch failed, 3 = Telegram delivery failed.
           # Data is committed in either case (see below); the step still goes red
@@ -106,7 +124,7 @@ jobs:
           exit $code
 
       - name: Indicative tax figure (optional)
-        if: always() && vars.TTPNL_TAX_RATE != ''
+        if: always() && vars.TTPNL_TAX_RATE != '' && env.SOURCE == 'api'
         continue-on-error: true
         run: python ttpnl.py tax --rate "${{ vars.TTPNL_TAX_RATE }}"
 
@@ -129,6 +147,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tradetron-pnl-reports
-          path: reports/
+          path: ${{ env.REPORTS_DIR }}/
           if-no-files-found: ignore
           retention-days: 30
