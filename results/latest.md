@@ -1,244 +1,231 @@
-# IronMan F&O scan — 20 Oct 2026, 20:27 IST
+# IronMan F&O scan — 21 Oct 2026, 13:41 IST
 
 `15m` bars · lookback **2** closed bar(s) · band **₹1,000 – ₹10,000** · 213/213 symbols scanned · source `yahoo`
 
-**12 signal(s)** at the ≥4/5 threshold · 89 in-band quiet · 112 out of band · 0 fetch failure(s)
+**0 signal(s)** at the ≥4/5 threshold · 99 in-band quiet · 114 out of band · 0 fetch failure(s)
 
 ## Signals
 
-| Symbol | LTP ₹ | Setup | Rating | Context | Triggered |
-| --- | --- | --- | --- | --- | --- |
-| **NSE:360ONE** | 1059.70 | BOX BREAKOUT | 5/5 | CHOP | 1 bar(s) ago (19 Oct 15:00 IST) |
-| **NSE:BHARATFORG** | 1792.30 | BOX BREAKDOWN | 5/5 | CHOP | 1 bar(s) ago (19 Oct 15:00 IST) |
-| **NSE:COCHINSHIP** | 1226.00 | BOX BREAKDOWN | 5/5 | CHOP | 1 bar(s) ago (19 Oct 15:00 IST) |
-| **NSE:DMART** | 3303.00 | BOX BREAKDOWN | 5/5 | CHOP | 1 bar(s) ago (19 Oct 15:00 IST) |
-| **NSE:ENRIN** | 2841.40 | BOX BREAKDOWN | 5/5 | BEARISH | 1 bar(s) ago (19 Oct 15:00 IST) |
-| **NSE:HAL** | 4937.80 | BOX BREAKDOWN | 5/5 | CHOP | 1 bar(s) ago (19 Oct 15:00 IST) |
-| **NSE:JINDALSTEL** | 1037.50 | BOX BREAKDOWN | 5/5 | CHOP | 1 bar(s) ago (19 Oct 15:00 IST) |
-| **NSE:MAZDOCK** | 2051.60 | BOX BREAKDOWN | 5/5 | CHOP | 1 bar(s) ago (19 Oct 15:00 IST) |
-| **NSE:PIDILITIND** | 1478.00 | BOX BREAKDOWN | 5/5 | CHOP | 1 bar(s) ago (19 Oct 15:00 IST) |
-| **NSE:PRESTIGE** | 1466.10 | BOX BREAKDOWN | 5/5 | CHOP | 1 bar(s) ago (19 Oct 15:00 IST) |
-| **NSE:UNITDSPR** | 1360.30 | BOX BREAKDOWN | 5/5 | CHOP | 1 bar(s) ago (19 Oct 15:00 IST) |
-| **NSE:ZYDUSLIFE** | 1111.50 | BOX BREAKDOWN | 5/5 | CHOP | 1 bar(s) ago (19 Oct 15:00 IST) |
+No watchlist symbol scored ≥4/5 while in band in this window.
 
 ## Watchlist
 
 | Symbol | Sector | LTP ₹ | Setup | Rating | Context | Band |
 | --- | --- | --- | --- | --- | --- | --- |
-| NSE:COALINDIA | Energy & Power | 411.70 | OUT OF RANGE | 5/5 | BEARISH | **out** |
-| NSE:360ONE | Financial Services | 1055.00 | None | 0/5 | CHOP | in |
-| NSE:ABB | Capital Goods & Defence | 6974.00 | None | 0/5 | CHOP | in |
-| NSE:ABCAPITAL | Financial Services | 373.05 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
-| NSE:ADANIENSOL | Energy & Power | 1364.90 | None | 0/5 | CHOP | in |
-| NSE:ADANIENT | Diversified | 2657.50 | None | 0/5 | CHOP | in |
-| NSE:ADANIGREEN | Energy & Power | 1295.20 | None | 0/5 | CHOP | in |
-| NSE:ADANIPORTS | Infrastructure & Logistics | 1766.00 | None | 0/5 | CHOP | in |
-| NSE:ADANIPOWER | Energy & Power | 194.08 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:ALKEM | Pharma & Healthcare | 5004.00 | None | 0/5 | BEARISH | in |
-| NSE:AMBER | Consumer Durables & Retail | 6529.50 | None | 0/5 | EXT BEAR | in |
-| NSE:AMBUJACEM | Cement & Building Materials | 361.85 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:ANANDRATHI | Unknown | 2163.90 | None | 0/5 | CHOP | in |
-| NSE:ANGELONE | Financial Services | 302.90 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:APLAPOLLO | Metals & Mining | 2144.60 | None | 0/5 | CHOP | in |
-| NSE:APOLLOHOSP | Pharma & Healthcare | 7700.00 | None | 0/5 | EXT BEAR | in |
-| NSE:ASHOKLEY | Auto & Ancillaries | 147.72 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:ASIANPAINT | Consumer Durables & Retail | 2330.70 | None | 0/5 | CHOP | in |
-| NSE:ASTRAL | Cement & Building Materials | 1428.00 | None | 0/5 | CHOP | in |
-| NSE:ATHERENERG | Auto & Ancillaries | 1459.00 | None | 0/5 | SIDEWAYS | in |
-| NSE:AUBANK | Banks | 971.70 | OUT OF RANGE | 0/5 | BEARISH | **out** |
-| NSE:AUROPHARMA | Pharma & Healthcare | 1621.40 | None | 0/5 | EXT BEAR | in |
-| NSE:AXISBANK | Banks | 1236.00 | None | 0/5 | CHOP | in |
-| NSE:BAJAJ-AUTO | Auto & Ancillaries | 10287.00 | OUT OF RANGE | 0/5 | SIDEWAYS | **out** |
-| NSE:BAJAJFINSV | Financial Services | 1700.00 | None | 0/5 | CHOP | in |
-| NSE:BAJAJHLDNG | Financial Services | 11265.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:BAJFINANCE | Financial Services | 957.35 | OUT OF RANGE | 0/5 | BEARISH | **out** |
-| NSE:BANDHANBNK | Banks | 163.80 | OUT OF RANGE | 0/5 | BEARISH | **out** |
-| NSE:BANKBARODA | Banks | 238.20 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:BANKINDIA | Banks | 136.78 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:BDL | Capital Goods & Defence | 1088.00 | None | 0/5 | CHOP | in |
-| NSE:BEL | Capital Goods & Defence | 377.20 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:BHARATFORG | Auto & Ancillaries | 1798.60 | None | 0/5 | CHOP | in |
-| NSE:BHARTIARTL | Telecom & Media | 1875.20 | None | 0/5 | CHOP | in |
-| NSE:BHEL | Capital Goods & Defence | 427.35 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:BIOCON | Pharma & Healthcare | 340.00 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
-| NSE:BLUESTARCO | Consumer Durables & Retail | 1571.20 | None | 0/5 | CHOP | in |
-| NSE:BOSCHLTD | Auto & Ancillaries | 45195.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:BPCL | Energy & Power | 294.30 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:BRITANNIA | FMCG & Consumer | 4705.00 | None | 0/5 | BEARISH | in |
-| NSE:BSE | Financial Services | 3336.00 | None | 0/5 | CHOP | in |
-| NSE:CAMS | Financial Services | 687.50 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:CANBK | Banks | 122.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:CDSL | Financial Services | 1270.00 | None | 0/5 | CHOP | in |
-| NSE:CGPOWER | Capital Goods & Defence | 855.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:CHOLAFIN | Financial Services | 1553.00 | None | 0/5 | BEARISH | in |
-| NSE:CIPLA | Pharma & Healthcare | 1324.10 | None | 0/5 | CHOP | in |
-| NSE:COCHINSHIP | Capital Goods & Defence | 1226.50 | None | 0/5 | CHOP | in |
-| NSE:COFORGE | IT | 1925.00 | None | 0/5 | CHOP | in |
-| NSE:COLPAL | FMCG & Consumer | 1741.10 | None | 0/5 | CHOP | in |
-| NSE:CONCOR | Infrastructure & Logistics | 441.65 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:CROMPTON | Consumer Durables & Retail | 208.45 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:CUMMINSIND | Capital Goods & Defence | 4612.00 | None | 0/5 | CHOP | in |
-| NSE:DABUR | FMCG & Consumer | 378.50 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:DELHIVERY | Infrastructure & Logistics | 400.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:DIVISLAB | Pharma & Healthcare | 9087.00 | None | 0/5 | CHOP | in |
-| NSE:DIXON | Consumer Durables & Retail | 12100.00 | OUT OF RANGE | 0/5 | BEARISH | **out** |
-| NSE:DLF | Realty | 672.85 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:DMART | Consumer Durables & Retail | 3304.00 | None | 0/5 | CHOP | in |
-| NSE:DRREDDY | Pharma & Healthcare | 1242.50 | None | 0/5 | CHOP | in |
-| NSE:EICHERMOT | Auto & Ancillaries | 7349.00 | None | 0/5 | CHOP | in |
-| NSE:ENRIN | Unknown | 2832.00 | None | 0/5 | BEARISH | in |
-| NSE:ETERNAL | Consumer Durables & Retail | 320.20 | OUT OF RANGE | 0/5 | SIDEWAYS | **out** |
-| NSE:FEDERALBNK | Banks | 348.85 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:FORCEMOT | Auto & Ancillaries | 17563.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:FORTIS | Pharma & Healthcare | 737.80 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:GAIL | Energy & Power | 167.30 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:GLENMARK | Pharma & Healthcare | 2210.20 | None | 0/5 | CHOP | in |
-| NSE:GMRAIRPORT | Infrastructure & Logistics | 90.10 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:GODFRYPHLP | FMCG & Consumer | 1807.50 | None | 0/5 | CHOP | in |
-| NSE:GODREJCP | FMCG & Consumer | 847.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:GODREJPROP | Realty | 1589.00 | None | 0/5 | CHOP | in |
+| NSE:360ONE | Financial Services | 1038.50 | None | 0/5 | CHOP | in |
+| NSE:ABB | Capital Goods & Defence | 6541.00 | None | 0/5 | CHOP | in |
+| NSE:ABCAPITAL | Financial Services | 366.65 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
+| NSE:ADANIENSOL | Energy & Power | 1336.50 | None | 0/5 | CHOP | in |
+| NSE:ADANIENT | Diversified | 2592.80 | None | 0/5 | EXT BEAR | in |
+| NSE:ADANIGREEN | Energy & Power | 1268.20 | None | 0/5 | CHOP | in |
+| NSE:ADANIPORTS | Infrastructure & Logistics | 1733.40 | None | 0/5 | CHOP | in |
+| NSE:ADANIPOWER | Energy & Power | 188.17 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:ALKEM | Pharma & Healthcare | 4992.00 | None | 0/5 | CHOP | in |
+| NSE:AMBER | Consumer Durables & Retail | 6310.00 | None | 0/5 | EXT BEAR | in |
+| NSE:AMBUJACEM | Cement & Building Materials | 357.95 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:ANANDRATHI | Unknown | 2185.10 | None | 0/5 | CHOP | in |
+| NSE:ANGELONE | Financial Services | 291.10 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:APLAPOLLO | Metals & Mining | 2068.90 | None | 0/5 | BEARISH | in |
+| NSE:APOLLOHOSP | Pharma & Healthcare | 7581.50 | None | 0/5 | CHOP | in |
+| NSE:ASHOKLEY | Auto & Ancillaries | 144.91 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:ASIANPAINT | Consumer Durables & Retail | 2307.10 | None | 0/5 | CHOP | in |
+| NSE:ASTRAL | Cement & Building Materials | 1388.10 | None | 0/5 | EXT BEAR | in |
+| NSE:ATHERENERG | Auto & Ancillaries | 1436.40 | None | 0/5 | CHOP | in |
+| NSE:AUBANK | Banks | 949.90 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:AUROPHARMA | Pharma & Healthcare | 1577.00 | None | 0/5 | EXT BEAR | in |
+| NSE:AXISBANK | Banks | 1210.30 | None | 0/5 | BEARISH | in |
+| NSE:BAJAJ-AUTO | Auto & Ancillaries | 10054.00 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:BAJAJFINSV | Financial Services | 1668.10 | None | 0/5 | CHOP | in |
+| NSE:BAJAJHLDNG | Financial Services | 10997.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:BAJFINANCE | Financial Services | 924.75 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
+| NSE:BANDHANBNK | Banks | 160.53 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:BANKBARODA | Banks | 237.48 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:BANKINDIA | Banks | 136.70 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:BDL | Capital Goods & Defence | 1062.90 | None | 0/5 | BEARISH | in |
+| NSE:BEL | Capital Goods & Defence | 369.25 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:BHARATFORG | Auto & Ancillaries | 1758.80 | None | 0/5 | BEARISH | in |
+| NSE:BHARTIARTL | Telecom & Media | 1871.10 | None | 0/5 | CHOP | in |
+| NSE:BHEL | Capital Goods & Defence | 412.00 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:BIOCON | Pharma & Healthcare | 332.40 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
+| NSE:BLUESTARCO | Consumer Durables & Retail | 1555.20 | None | 0/5 | CHOP | in |
+| NSE:BOSCHLTD | Auto & Ancillaries | 44105.00 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:BPCL | Energy & Power | 286.30 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
+| NSE:BRITANNIA | FMCG & Consumer | 4681.60 | None | 0/5 | CHOP | in |
+| NSE:BSE | Financial Services | 3273.50 | None | 0/5 | CHOP | in |
+| NSE:CAMS | Financial Services | 678.60 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:CANBK | Banks | 120.09 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:CDSL | Financial Services | 1234.40 | None | 0/5 | EXT BEAR | in |
+| NSE:CGPOWER | Capital Goods & Defence | 819.25 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:CHOLAFIN | Financial Services | 1517.80 | None | 0/5 | BEARISH | in |
+| NSE:CIPLA | Pharma & Healthcare | 1310.50 | None | 0/5 | CHOP | in |
+| NSE:COALINDIA | Energy & Power | 405.85 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:COCHINSHIP | Capital Goods & Defence | 1173.00 | None | 0/5 | EXT BEAR | in |
+| NSE:COFORGE | IT | 1954.00 | None | 0/5 | CHOP | in |
+| NSE:COLPAL | FMCG & Consumer | 1720.10 | None | 0/5 | CHOP | in |
+| NSE:CONCOR | Infrastructure & Logistics | 428.75 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:CROMPTON | Consumer Durables & Retail | 202.14 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:CUMMINSIND | Capital Goods & Defence | 4424.30 | None | 0/5 | EXT BEAR | in |
+| NSE:DABUR | FMCG & Consumer | 373.15 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:DELHIVERY | Infrastructure & Logistics | 387.85 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:DIVISLAB | Pharma & Healthcare | 9092.50 | None | 0/5 | CHOP | in |
+| NSE:DIXON | Consumer Durables & Retail | 11695.00 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:DLF | Realty | 661.95 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:DMART | Consumer Durables & Retail | 3238.70 | None | 0/5 | BEARISH | in |
+| NSE:DRREDDY | Pharma & Healthcare | 1237.70 | None | 0/5 | CHOP | in |
+| NSE:EICHERMOT | Auto & Ancillaries | 7136.00 | None | 0/5 | BEARISH | in |
+| NSE:ENRIN | Unknown | 2791.60 | None | 0/5 | CHOP | in |
+| NSE:ETERNAL | Consumer Durables & Retail | 310.40 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:FEDERALBNK | Banks | 342.15 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:FORCEMOT | Auto & Ancillaries | 16904.00 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:FORTIS | Pharma & Healthcare | 723.55 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
+| NSE:GAIL | Energy & Power | 165.80 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:GLENMARK | Pharma & Healthcare | 2179.10 | None | 0/5 | CHOP | in |
+| NSE:GMRAIRPORT | Infrastructure & Logistics | 87.56 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:GODFRYPHLP | FMCG & Consumer | 1762.00 | None | 0/5 | BEARISH | in |
+| NSE:GODREJCP | FMCG & Consumer | 855.80 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:GODREJPROP | Realty | 1550.00 | None | 0/5 | CHOP | in |
 | NSE:GRASIM | Cement & Building Materials | 2879.00 | None | 0/5 | CHOP | in |
-| NSE:GVT&D | Capital Goods & Defence | 3925.00 | None | 0/5 | CHOP | in |
-| NSE:HAL | Capital Goods & Defence | 4959.00 | None | 0/5 | CHOP | in |
-| NSE:HAVELLS | Consumer Durables & Retail | 1102.70 | None | 0/5 | CHOP | in |
-| NSE:HCLTECH | IT | 1379.90 | None | 0/5 | CHOP | in |
-| NSE:HDFCAMC | Financial Services | 2349.20 | None | 0/5 | CHOP | in |
-| NSE:HDFCBANK | Banks | 712.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:HDFCLIFE | Financial Services | 545.50 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:HEROMOTOCO | Auto & Ancillaries | 5230.00 | None | 0/5 | CHOP | in |
-| NSE:HINDALCO | Metals & Mining | 900.45 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:HINDPETRO | Energy & Power | 348.50 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:HINDUNILVR | FMCG & Consumer | 1853.20 | None | 0/5 | CHOP | in |
-| NSE:HINDZINC | Metals & Mining | 538.40 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:HYUNDAI | Auto & Ancillaries | 1955.00 | None | 0/5 | CHOP | in |
-| NSE:ICICIBANK | Banks | 1381.00 | None | 0/5 | CHOP | in |
-| NSE:ICICIGI | Financial Services | 1650.00 | None | 0/5 | CHOP | in |
-| NSE:ICICIPRULI | Financial Services | 438.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:IDEA | Telecom & Media | 12.28 | OUT OF RANGE | 0/5 | BEARISH | **out** |
-| NSE:IDFCFIRSTB | Banks | 76.33 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
-| NSE:IEX | Financial Services | 104.80 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:INDHOTEL | Consumer Durables & Retail | 760.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:INDIANB | Banks | 856.85 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:INDIGO | Infrastructure & Logistics | 4700.00 | None | 0/5 | CHOP | in |
-| NSE:INDUSINDBK | Banks | 863.20 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:INDUSTOWER | Telecom & Media | 382.40 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:INFY | IT | 1130.70 | None | 0/5 | SIDEWAYS | in |
-| NSE:INOXWIND | Energy & Power | 64.89 | OUT OF RANGE | 0/5 | BEARISH | **out** |
-| NSE:IOC | Energy & Power | 130.25 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:IREDA | Energy & Power | 106.54 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
-| NSE:IRFC | Infrastructure & Logistics | 78.44 | OUT OF RANGE | 0/5 | BEARISH | **out** |
-| NSE:ITC | FMCG & Consumer | 260.80 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:JINDALSTEL | Metals & Mining | 1041.80 | None | 0/5 | CHOP | in |
-| NSE:JIOFIN | Financial Services | 214.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:JSWENERGY | Energy & Power | 482.20 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:JSWSTEEL | Metals & Mining | 1241.30 | None | 0/5 | CHOP | in |
-| NSE:JUBLFOOD | FMCG & Consumer | 413.50 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:KALYANKJIL | Consumer Durables & Retail | 551.30 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:KAYNES | Capital Goods & Defence | 3250.00 | None | 0/5 | CHOP | in |
-| NSE:KEI | Cement & Building Materials | 4442.00 | None | 0/5 | CHOP | in |
-| NSE:KFINTECH | Financial Services | 872.55 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:KOTAKBANK | Banks | 442.30 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:KPITTECH | IT | 536.95 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:LAURUSLABS | Pharma & Healthcare | 2069.00 | None | 0/5 | CHOP | in |
-| NSE:LICHSGFIN | Financial Services | 511.50 | OUT OF RANGE | 0/5 | BEARISH | **out** |
-| NSE:LICI | Financial Services | 393.35 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:LODHA | Realty | 1030.00 | None | 0/5 | CHOP | in |
-| NSE:LT | Capital Goods & Defence | 3661.90 | None | 0/5 | CHOP | in |
-| NSE:LTF | Financial Services | 253.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:LTM | IT | 4264.90 | None | 0/5 | CHOP | in |
-| NSE:LUPIN | Pharma & Healthcare | 1939.20 | None | 0/5 | CHOP | in |
-| NSE:M&M | Auto & Ancillaries | 2907.00 | None | 0/5 | CHOP | in |
-| NSE:MAHABANK | Banks | 80.96 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:MANAPPURAM | Financial Services | 319.55 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:MANKIND | Pharma & Healthcare | 2253.20 | None | 0/5 | BEARISH | in |
-| NSE:MARICO | FMCG & Consumer | 778.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:MARUTI | Auto & Ancillaries | 11475.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:MAXHEALTH | Pharma & Healthcare | 830.00 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
-| NSE:MAZDOCK | Capital Goods & Defence | 2052.00 | None | 0/5 | BEARISH | in |
-| NSE:MCX | Financial Services | 3184.50 | None | 0/5 | CHOP | in |
-| NSE:MFSL | Financial Services | 1281.00 | None | 0/5 | CHOP | in |
-| NSE:MOTHERSON | Auto & Ancillaries | 158.15 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:MOTILALOFS | Financial Services | 1021.00 | None | 0/5 | CHOP | in |
-| NSE:MPHASIS | IT | 2500.00 | None | 0/5 | CHOP | in |
-| NSE:MUTHOOTFIN | Financial Services | 2566.00 | None | 0/5 | CHOP | in |
-| NSE:NAM-INDIA | Financial Services | 1038.40 | None | 0/5 | CHOP | in |
-| NSE:NATIONALUM | Metals & Mining | 318.00 | OUT OF RANGE | 0/5 | BEARISH | **out** |
-| NSE:NAUKRI | IT | 1220.00 | None | 0/5 | BEARISH | in |
-| NSE:NBCC | Infrastructure & Logistics | 73.70 | OUT OF RANGE | 0/5 | BEARISH | **out** |
-| NSE:NESTLEIND | FMCG & Consumer | 1242.70 | None | 0/5 | CHOP | in |
-| NSE:NHPC | Energy & Power | 70.70 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:NMDC | Metals & Mining | 70.50 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:NTPC | Energy & Power | 309.00 | OUT OF RANGE | 0/5 | BEARISH | **out** |
-| NSE:NYKAA | Consumer Durables & Retail | 336.65 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:OBEROIRLTY | Realty | 1676.40 | None | 0/5 | CHOP | in |
-| NSE:OFSS | IT | 10214.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:OIL | Energy & Power | 449.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:ONGC | Energy & Power | 225.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:PAGEIND | Consumer Durables & Retail | 35770.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:PATANJALI | FMCG & Consumer | 364.80 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:PAYTM | Diversified | 1685.80 | None | 0/5 | CHOP | in |
-| NSE:PERSISTENT | IT | 5690.00 | None | 0/5 | BEARISH | in |
-| NSE:PETRONET | Energy & Power | 293.65 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:PFC | Financial Services | 332.40 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:PGEL | Consumer Durables & Retail | 508.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:PHOENIXLTD | Realty | 1884.00 | None | 0/5 | BEARISH | in |
-| NSE:PIDILITIND | Consumer Durables & Retail | 1482.60 | None | 0/5 | CHOP | in |
-| NSE:PIIND | Chemicals | 2163.50 | None | 0/5 | BEARISH | in |
-| NSE:PNB | Banks | 121.90 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:PNBHOUSING | Financial Services | 1147.90 | None | 0/5 | CHOP | in |
-| NSE:POLICYBZR | Financial Services | 1035.00 | None | 0/5 | CHOP | in |
-| NSE:POLYCAB | Cement & Building Materials | 8025.00 | None | 0/5 | CHOP | in |
-| NSE:POWERGRID | Energy & Power | 250.35 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:POWERINDIA | Capital Goods & Defence | 28730.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:PREMIERENE | Energy & Power | 899.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:PRESTIGE | Realty | 1475.00 | None | 0/5 | CHOP | in |
-| NSE:RADICO | FMCG & Consumer | 4435.50 | None | 0/5 | CHOP | in |
-| NSE:RBLBANK | Banks | 375.75 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:RECLTD | Financial Services | 302.35 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:RELIANCE | Diversified | 1202.00 | None | 0/5 | SIDEWAYS | in |
-| NSE:RVNL | Infrastructure & Logistics | 194.50 | OUT OF RANGE | 0/5 | BEARISH | **out** |
-| NSE:SAGILITY | IT | 43.99 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:SAIL | Metals & Mining | 168.97 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:SBICARD | Financial Services | 567.40 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:SBILIFE | Financial Services | 1647.80 | None | 0/5 | CHOP | in |
-| NSE:SBIN | Banks | 973.70 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:SHREECEM | Cement & Building Materials | 22290.00 | OUT OF RANGE | 0/5 | SIDEWAYS | **out** |
-| NSE:SHRIRAMFIN | Financial Services | 926.50 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:SIEMENS | Capital Goods & Defence | 3623.00 | None | 0/5 | CHOP | in |
-| NSE:SOLARINDS | Energy & Power | 19803.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:SONACOMS | Auto & Ancillaries | 794.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:SRF | Chemicals | 2432.00 | None | 0/5 | CHOP | in |
-| NSE:SUNPHARMA | Pharma & Healthcare | 1743.00 | None | 0/5 | CHOP | in |
-| NSE:SUPREMEIND | Cement & Building Materials | 3620.70 | None | 0/5 | CHOP | in |
-| NSE:SUZLON | Energy & Power | 40.38 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:SWIGGY | Consumer Durables & Retail | 229.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:TATACONSUM | FMCG & Consumer | 966.50 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:TATAELXSI | IT | 3790.00 | None | 0/5 | CHOP | in |
-| NSE:TATAPOWER | Energy & Power | 352.25 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:TATASTEEL | Metals & Mining | 174.04 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:TCS | IT | 2460.90 | None | 0/5 | CHOP | in |
-| NSE:TECHM | IT | 1779.10 | None | 0/5 | CHOP | in |
-| NSE:TIINDIA | Auto & Ancillaries | 2170.00 | None | 0/5 | BEARISH | in |
-| NSE:TITAN | Consumer Durables & Retail | 4424.20 | None | 0/5 | CHOP | in |
-| NSE:TMPV | Auto & Ancillaries | 278.00 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
-| NSE:TORNTPHARM | Pharma & Healthcare | 4558.70 | None | 0/5 | CHOP | in |
-| NSE:TRENT | Consumer Durables & Retail | 2891.60 | None | 0/5 | CHOP | in |
-| NSE:TVSMOTOR | Auto & Ancillaries | 4074.00 | None | 0/5 | CHOP | in |
-| NSE:UJJIVANSFB | Unknown | 63.20 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:ULTRACEMCO | Cement & Building Materials | 10650.00 | OUT OF RANGE | 0/5 | BEARISH | **out** |
-| NSE:UNIONBANK | Banks | 180.70 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:UNITDSPR | FMCG & Consumer | 1364.00 | None | 0/5 | CHOP | in |
-| NSE:UNOMINDA | Auto & Ancillaries | 1087.40 | None | 0/5 | BEARISH | in |
-| NSE:UPL | Chemicals | 530.35 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:VBL | FMCG & Consumer | 420.55 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:VEDL | Metals & Mining | 243.20 | OUT OF RANGE | 0/5 | BEARISH | **out** |
-| NSE:VMM | Consumer Durables & Retail | 94.44 | OUT OF RANGE | 0/5 | CHOP | **out** |
-| NSE:VOLTAS | Consumer Durables & Retail | 1019.60 | None | 0/5 | CHOP | in |
-| NSE:WAAREEENER | Energy & Power | 2515.00 | None | 0/5 | CHOP | in |
-| NSE:WIPRO | IT | 182.14 | OUT OF RANGE | 0/5 | SIDEWAYS | **out** |
-| NSE:YESBANK | Banks | 16.88 | OUT OF RANGE | 0/5 | BEARISH | **out** |
-| NSE:ZYDUSLIFE | Pharma & Healthcare | 1113.90 | None | 0/5 | CHOP | in |
+| NSE:GVT&D | Capital Goods & Defence | 3739.30 | None | 0/5 | BEARISH | in |
+| NSE:HAL | Capital Goods & Defence | 4858.40 | None | 0/5 | CHOP | in |
+| NSE:HAVELLS | Consumer Durables & Retail | 1068.60 | None | 0/5 | BEARISH | in |
+| NSE:HCLTECH | IT | 1407.90 | None | 0/5 | EXT BULL | in |
+| NSE:HDFCAMC | Financial Services | 2296.40 | None | 0/5 | BEARISH | in |
+| NSE:HDFCBANK | Banks | 700.30 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:HDFCLIFE | Financial Services | 534.20 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
+| NSE:HEROMOTOCO | Auto & Ancillaries | 5107.50 | None | 0/5 | CHOP | in |
+| NSE:HINDALCO | Metals & Mining | 890.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:HINDPETRO | Energy & Power | 343.40 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:HINDUNILVR | FMCG & Consumer | 1843.50 | None | 0/5 | CHOP | in |
+| NSE:HINDZINC | Metals & Mining | 525.90 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:HYUNDAI | Auto & Ancillaries | 1937.80 | None | 0/5 | CHOP | in |
+| NSE:ICICIBANK | Banks | 1389.30 | None | 0/5 | CHOP | in |
+| NSE:ICICIGI | Financial Services | 1632.80 | None | 0/5 | CHOP | in |
+| NSE:ICICIPRULI | Financial Services | 429.00 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
+| NSE:IDEA | Telecom & Media | 11.80 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
+| NSE:IDFCFIRSTB | Banks | 75.14 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:IEX | Financial Services | 103.18 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:INDHOTEL | Consumer Durables & Retail | 747.80 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:INDIANB | Banks | 854.45 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:INDIGO | Infrastructure & Logistics | 4606.30 | None | 0/5 | CHOP | in |
+| NSE:INDUSINDBK | Banks | 836.25 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:INDUSTOWER | Telecom & Media | 379.15 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:INFY | IT | 1164.25 | None | 0/5 | BULLISH | in |
+| NSE:INOXWIND | Energy & Power | 62.74 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:IOC | Energy & Power | 129.50 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:IREDA | Energy & Power | 103.00 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:IRFC | Infrastructure & Logistics | 76.60 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:ITC | FMCG & Consumer | 261.45 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:JINDALSTEL | Metals & Mining | 1020.80 | None | 0/5 | CHOP | in |
+| NSE:JIOFIN | Financial Services | 211.10 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:JSWENERGY | Energy & Power | 470.05 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:JSWSTEEL | Metals & Mining | 1225.40 | None | 0/5 | CHOP | in |
+| NSE:JUBLFOOD | FMCG & Consumer | 405.10 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:KALYANKJIL | Consumer Durables & Retail | 562.15 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:KAYNES | Capital Goods & Defence | 3156.70 | None | 0/5 | EXT BEAR | in |
+| NSE:KEI | Cement & Building Materials | 4277.80 | None | 0/5 | BEARISH | in |
+| NSE:KFINTECH | Financial Services | 844.80 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:KOTAKBANK | Banks | 435.35 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:KPITTECH | IT | 541.05 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:LAURUSLABS | Pharma & Healthcare | 2015.70 | None | 0/5 | BEARISH | in |
+| NSE:LICHSGFIN | Financial Services | 506.60 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:LICI | Financial Services | 391.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:LODHA | Realty | 1014.90 | None | 0/5 | CHOP | in |
+| NSE:LT | Capital Goods & Defence | 3639.60 | None | 0/5 | CHOP | in |
+| NSE:LTF | Financial Services | 245.40 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:LTM | IT | 4296.60 | None | 0/5 | CHOP | in |
+| NSE:LUPIN | Pharma & Healthcare | 1944.90 | None | 0/5 | CHOP | in |
+| NSE:M&M | Auto & Ancillaries | 2865.80 | None | 0/5 | CHOP | in |
+| NSE:MAHABANK | Banks | 78.98 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:MANAPPURAM | Financial Services | 300.50 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:MANKIND | Pharma & Healthcare | 2250.20 | None | 0/5 | CHOP | in |
+| NSE:MARICO | FMCG & Consumer | 775.10 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:MARUTI | Auto & Ancillaries | 11255.00 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:MAXHEALTH | Pharma & Healthcare | 815.10 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:MAZDOCK | Capital Goods & Defence | 2003.00 | None | 0/5 | BEARISH | in |
+| NSE:MCX | Financial Services | 3087.80 | None | 0/5 | EXT BEAR | in |
+| NSE:MFSL | Financial Services | 1254.30 | None | 0/5 | EXT BEAR | in |
+| NSE:MOTHERSON | Auto & Ancillaries | 156.72 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:MOTILALOFS | Financial Services | 983.00 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:MPHASIS | IT | 2561.20 | None | 0/5 | CHOP | in |
+| NSE:MUTHOOTFIN | Financial Services | 2456.50 | None | 0/5 | EXT BEAR | in |
+| NSE:NAM-INDIA | Financial Services | 1006.30 | None | 0/5 | BEARISH | in |
+| NSE:NATIONALUM | Metals & Mining | 309.10 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:NAUKRI | IT | 1210.70 | None | 0/5 | CHOP | in |
+| NSE:NBCC | Infrastructure & Logistics | 71.37 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:NESTLEIND | FMCG & Consumer | 1212.60 | None | 0/5 | BEARISH | in |
+| NSE:NHPC | Energy & Power | 72.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:NMDC | Metals & Mining | 69.21 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
+| NSE:NTPC | Energy & Power | 302.75 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
+| NSE:NYKAA | Consumer Durables & Retail | 323.90 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
+| NSE:OBEROIRLTY | Realty | 1635.90 | None | 0/5 | EXT BEAR | in |
+| NSE:OFSS | IT | 10248.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:OIL | Energy & Power | 451.30 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:ONGC | Energy & Power | 225.41 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:PAGEIND | Consumer Durables & Retail | 35000.00 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:PATANJALI | FMCG & Consumer | 356.35 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:PAYTM | Diversified | 1662.00 | None | 0/5 | CHOP | in |
+| NSE:PERSISTENT | IT | 5820.00 | None | 0/5 | CHOP | in |
+| NSE:PETRONET | Energy & Power | 295.95 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:PFC | Financial Services | 326.25 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:PGEL | Consumer Durables & Retail | 493.45 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:PHOENIXLTD | Realty | 1870.30 | None | 0/5 | CHOP | in |
+| NSE:PIDILITIND | Consumer Durables & Retail | 1469.10 | None | 0/5 | CHOP | in |
+| NSE:PIIND | Chemicals | 2100.60 | None | 0/5 | BEARISH | in |
+| NSE:PNB | Banks | 121.73 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:PNBHOUSING | Financial Services | 1147.00 | None | 0/5 | CHOP | in |
+| NSE:POLICYBZR | Financial Services | 1012.60 | None | 0/5 | CHOP | in |
+| NSE:POLYCAB | Cement & Building Materials | 7788.50 | None | 0/5 | BEARISH | in |
+| NSE:POWERGRID | Energy & Power | 247.35 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:POWERINDIA | Capital Goods & Defence | 27970.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:PREMIERENE | Energy & Power | 875.75 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:PRESTIGE | Realty | 1431.40 | None | 0/5 | EXT BEAR | in |
+| NSE:RADICO | FMCG & Consumer | 4330.00 | None | 0/5 | BEARISH | in |
+| NSE:RBLBANK | Banks | 357.40 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
+| NSE:RECLTD | Financial Services | 300.05 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:RELIANCE | Diversified | 1208.80 | None | 0/5 | CHOP | in |
+| NSE:RVNL | Infrastructure & Logistics | 188.10 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
+| NSE:SAGILITY | IT | 43.57 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:SAIL | Metals & Mining | 171.62 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:SBICARD | Financial Services | 554.40 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:SBILIFE | Financial Services | 1658.40 | None | 0/5 | CHOP | in |
+| NSE:SBIN | Banks | 966.20 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:SHREECEM | Cement & Building Materials | 22305.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:SHRIRAMFIN | Financial Services | 905.40 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
+| NSE:SIEMENS | Capital Goods & Defence | 3439.80 | None | 0/5 | EXT BEAR | in |
+| NSE:SOLARINDS | Energy & Power | 19175.00 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
+| NSE:SONACOMS | Auto & Ancillaries | 762.50 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:SRF | Chemicals | 2382.00 | None | 0/5 | CHOP | in |
+| NSE:SUNPHARMA | Pharma & Healthcare | 1729.60 | None | 0/5 | CHOP | in |
+| NSE:SUPREMEIND | Cement & Building Materials | 3551.20 | None | 0/5 | CHOP | in |
+| NSE:SUZLON | Energy & Power | 39.07 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:SWIGGY | Consumer Durables & Retail | 222.55 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:TATACONSUM | FMCG & Consumer | 964.70 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:TATAELXSI | IT | 3824.00 | None | 0/5 | CHOP | in |
+| NSE:TATAPOWER | Energy & Power | 349.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:TATASTEEL | Metals & Mining | 171.72 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:TCS | IT | 2517.80 | None | 0/5 | CHOP | in |
+| NSE:TECHM | IT | 1830.60 | None | 0/5 | BULLISH | in |
+| NSE:TIINDIA | Auto & Ancillaries | 2115.90 | None | 0/5 | EXT BEAR | in |
+| NSE:TITAN | Consumer Durables & Retail | 4368.50 | None | 0/5 | CHOP | in |
+| NSE:TMPV | Auto & Ancillaries | 273.90 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:TORNTPHARM | Pharma & Healthcare | 4507.80 | None | 0/5 | CHOP | in |
+| NSE:TRENT | Consumer Durables & Retail | 2809.60 | None | 0/5 | EXT BEAR | in |
+| NSE:TVSMOTOR | Auto & Ancillaries | 3957.50 | None | 0/5 | BEARISH | in |
+| NSE:UJJIVANSFB | Unknown | 60.88 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:ULTRACEMCO | Cement & Building Materials | 10835.00 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:UNIONBANK | Banks | 181.07 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:UNITDSPR | FMCG & Consumer | 1304.50 | None | 0/5 | BEARISH | in |
+| NSE:UNOMINDA | Auto & Ancillaries | 1057.80 | None | 0/5 | BEARISH | in |
+| NSE:UPL | Chemicals | 511.75 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:VBL | FMCG & Consumer | 407.05 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:VEDL | Metals & Mining | 235.65 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
+| NSE:VMM | Consumer Durables & Retail | 89.39 | OUT OF RANGE | 0/5 | EXT BEAR | **out** |
+| NSE:VOLTAS | Consumer Durables & Retail | 997.70 | OUT OF RANGE | 0/5 | CHOP | **out** |
+| NSE:WAAREEENER | Energy & Power | 2416.50 | None | 0/5 | BEARISH | in |
+| NSE:WIPRO | IT | 188.80 | OUT OF RANGE | 0/5 | BULLISH | **out** |
+| NSE:YESBANK | Banks | 16.31 | OUT OF RANGE | 0/5 | BEARISH | **out** |
+| NSE:ZYDUSLIFE | Pharma & Healthcare | 1113.10 | None | 0/5 | CHOP | in |
 
-**Out of band (112):** NSE:ADANIPOWER (194.08), NSE:BPCL (294.30), NSE:COALINDIA (411.70), NSE:GAIL (167.30), NSE:HINDPETRO (348.50), NSE:INOXWIND (64.89), NSE:IOC (130.25), NSE:IREDA (106.54), NSE:JSWENERGY (482.20), NSE:NHPC (70.70), NSE:NTPC (309.00), NSE:OIL (449.00), NSE:ONGC (225.00), NSE:PETRONET (293.65), NSE:POWERGRID (250.35), NSE:PREMIERENE (899.00), NSE:SOLARINDS (19803.00), NSE:SUZLON (40.38), NSE:TATAPOWER (352.25), NSE:CONCOR (441.65), NSE:DELHIVERY (400.00), NSE:GMRAIRPORT (90.10), NSE:IRFC (78.44), NSE:NBCC (73.70), NSE:RVNL (194.50), NSE:BIOCON (340.00), NSE:FORTIS (737.80), NSE:MAXHEALTH (830.00), NSE:ABCAPITAL (373.05), NSE:ANGELONE (302.90), NSE:BAJAJHLDNG (11265.00), NSE:BAJFINANCE (957.35), NSE:CAMS (687.50), NSE:HDFCLIFE (545.50), NSE:ICICIPRULI (438.00), NSE:IEX (104.80), NSE:JIOFIN (214.00), NSE:KFINTECH (872.55), NSE:LICHSGFIN (511.50), NSE:LICI (393.35), NSE:LTF (253.00), NSE:MANAPPURAM (319.55), NSE:PFC (332.40), NSE:RECLTD (302.35), NSE:SBICARD (567.40), NSE:SHRIRAMFIN (926.50), NSE:CROMPTON (208.45), NSE:DIXON (12100.00), NSE:ETERNAL (320.20), NSE:INDHOTEL (760.00), NSE:KALYANKJIL (551.30), NSE:NYKAA (336.65), NSE:PAGEIND (35770.00), NSE:PGEL (508.00), NSE:SWIGGY (229.00), NSE:VMM (94.44), NSE:AMBUJACEM (361.85), NSE:SHREECEM (22290.00), NSE:ULTRACEMCO (10650.00), NSE:BEL (377.20), NSE:BHEL (427.35), NSE:CGPOWER (855.00), NSE:POWERINDIA (28730.00), NSE:HINDALCO (900.45), NSE:HINDZINC (538.40), NSE:NATIONALUM (318.00), NSE:NMDC (70.50), NSE:SAIL (168.97), NSE:TATASTEEL (174.04), NSE:VEDL (243.20), NSE:ASHOKLEY (147.72), NSE:BAJAJ-AUTO (10287.00), NSE:BOSCHLTD (45195.00), NSE:FORCEMOT (17563.00), NSE:MARUTI (11475.00), NSE:MOTHERSON (158.15), NSE:SONACOMS (794.00), NSE:TMPV (278.00), NSE:AUBANK (971.70), NSE:BANDHANBNK (163.80), NSE:BANKBARODA (238.20), NSE:BANKINDIA (136.78), NSE:CANBK (122.00), NSE:FEDERALBNK (348.85), NSE:HDFCBANK (712.00), NSE:IDFCFIRSTB (76.33), NSE:INDIANB (856.85), NSE:INDUSINDBK (863.20), NSE:KOTAKBANK (442.30), NSE:MAHABANK (80.96), NSE:PNB (121.90), NSE:RBLBANK (375.75), NSE:SBIN (973.70), NSE:UNIONBANK (180.70), NSE:YESBANK (16.88), NSE:IDEA (12.28), NSE:INDUSTOWER (382.40), NSE:DABUR (378.50), NSE:GODREJCP (847.00), NSE:ITC (260.80), NSE:JUBLFOOD (413.50), NSE:MARICO (778.00), NSE:PATANJALI (364.80), NSE:TATACONSUM (966.50), NSE:VBL (420.55), NSE:KPITTECH (536.95), NSE:OFSS (10214.00), NSE:SAGILITY (43.99), NSE:WIPRO (182.14), NSE:DLF (672.85), NSE:UPL (530.35), NSE:UJJIVANSFB (63.20)
+**Out of band (114):** NSE:ADANIPOWER (188.17), NSE:BPCL (286.30), NSE:COALINDIA (405.85), NSE:GAIL (165.80), NSE:HINDPETRO (343.40), NSE:INOXWIND (62.74), NSE:IOC (129.50), NSE:IREDA (103.00), NSE:JSWENERGY (470.05), NSE:NHPC (72.00), NSE:NTPC (302.75), NSE:OIL (451.30), NSE:ONGC (225.41), NSE:PETRONET (295.95), NSE:POWERGRID (247.35), NSE:PREMIERENE (875.75), NSE:SOLARINDS (19175.00), NSE:SUZLON (39.07), NSE:TATAPOWER (349.00), NSE:CONCOR (428.75), NSE:DELHIVERY (387.85), NSE:GMRAIRPORT (87.56), NSE:IRFC (76.60), NSE:NBCC (71.37), NSE:RVNL (188.10), NSE:BIOCON (332.40), NSE:FORTIS (723.55), NSE:MAXHEALTH (815.10), NSE:ABCAPITAL (366.65), NSE:ANGELONE (291.10), NSE:BAJAJHLDNG (10997.00), NSE:BAJFINANCE (924.75), NSE:CAMS (678.60), NSE:HDFCLIFE (534.20), NSE:ICICIPRULI (429.00), NSE:IEX (103.18), NSE:JIOFIN (211.10), NSE:KFINTECH (844.80), NSE:LICHSGFIN (506.60), NSE:LICI (391.00), NSE:LTF (245.40), NSE:MANAPPURAM (300.50), NSE:MOTILALOFS (983.00), NSE:PFC (326.25), NSE:RECLTD (300.05), NSE:SBICARD (554.40), NSE:SHRIRAMFIN (905.40), NSE:CROMPTON (202.14), NSE:DIXON (11695.00), NSE:ETERNAL (310.40), NSE:INDHOTEL (747.80), NSE:KALYANKJIL (562.15), NSE:NYKAA (323.90), NSE:PAGEIND (35000.00), NSE:PGEL (493.45), NSE:SWIGGY (222.55), NSE:VMM (89.39), NSE:VOLTAS (997.70), NSE:AMBUJACEM (357.95), NSE:SHREECEM (22305.00), NSE:ULTRACEMCO (10835.00), NSE:BEL (369.25), NSE:BHEL (412.00), NSE:CGPOWER (819.25), NSE:POWERINDIA (27970.00), NSE:HINDALCO (890.00), NSE:HINDZINC (525.90), NSE:NATIONALUM (309.10), NSE:NMDC (69.21), NSE:SAIL (171.62), NSE:TATASTEEL (171.72), NSE:VEDL (235.65), NSE:ASHOKLEY (144.91), NSE:BAJAJ-AUTO (10054.00), NSE:BOSCHLTD (44105.00), NSE:FORCEMOT (16904.00), NSE:MARUTI (11255.00), NSE:MOTHERSON (156.72), NSE:SONACOMS (762.50), NSE:TMPV (273.90), NSE:AUBANK (949.90), NSE:BANDHANBNK (160.53), NSE:BANKBARODA (237.48), NSE:BANKINDIA (136.70), NSE:CANBK (120.09), NSE:FEDERALBNK (342.15), NSE:HDFCBANK (700.30), NSE:IDFCFIRSTB (75.14), NSE:INDIANB (854.45), NSE:INDUSINDBK (836.25), NSE:KOTAKBANK (435.35), NSE:MAHABANK (78.98), NSE:PNB (121.73), NSE:RBLBANK (357.40), NSE:SBIN (966.20), NSE:UNIONBANK (181.07), NSE:YESBANK (16.31), NSE:IDEA (11.80), NSE:INDUSTOWER (379.15), NSE:DABUR (373.15), NSE:GODREJCP (855.80), NSE:ITC (261.45), NSE:JUBLFOOD (405.10), NSE:MARICO (775.10), NSE:PATANJALI (356.35), NSE:TATACONSUM (964.70), NSE:VBL (407.05), NSE:KPITTECH (541.05), NSE:OFSS (10248.00), NSE:SAGILITY (43.57), NSE:WIPRO (188.80), NSE:DLF (661.95), NSE:UPL (511.75), NSE:UJJIVANSFB (60.88)
 
-<sub>Scan took 12.3s · started 20 Oct 2026, 20:26 IST</sub>
+<sub>Scan took 11.4s · started 21 Oct 2026, 13:40 IST</sub>
