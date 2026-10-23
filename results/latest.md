@@ -1,4 +1,4 @@
-# IronMan F&O scan — 23 Oct 2026, 18:52 IST
+# IronMan F&O scan — 23 Oct 2026, 20:25 IST
 
 `15m` bars · lookback **2** closed bar(s) · band **₹1,000 – ₹10,000** · 212/213 symbols scanned · source `yahoo`
 
@@ -235,4 +235,4 @@
 
 - `NSE:ICICILIFE` — insufficient_data: need >= 101 bars, got 25
 
-<sub>Scan took 12.0s · started 23 Oct 2026, 18:52 IST</sub>
+<sub>Scan took 12.3s · started 23 Oct 2026, 20:25 IST</sub>
